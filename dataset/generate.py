@@ -10,6 +10,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 
+logging.basicConfig(level = logging.INFO)
 _logger = logging.getLogger(__name__)
 _TRANSFORMS = {'stft': STFT}
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
