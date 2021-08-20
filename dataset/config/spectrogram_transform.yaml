@@ -1,0 +1,24 @@
+transform: 
+  name: stft                    # melspectrogram, cqt, dft, 
+  n_fft: 128                    # could be a list to denote computing multiple transform for different values of n_fft
+  win_length: 128               # should be less than n_fft
+  freq_bins: 32                 # by default: n_fft//2+1
+  hop_length: 32                # stride
+  freq_scale: linear            # linear, log, no; relies on the fmin, fmax values
+  center: true                  # kernel centered around the current sample
+  pad_mode: constant            # reflect
+  fmin: 20
+  fmax: 500
+  sr: 2048                      # sampling rate
+  output_format: Magnitude      # magnitude, complex, phase; for the last two it returns two channels
+  trainable: false    
+  verbose: false
+
+stacking: 0                    # stack signals from the three detectors along this axis
+scaling:                        # rescale the values to [-1, 1]
+  - 0
+  - 1e-19
+dataloader:
+  batch_size: 32
+  num_workers: 4
+  shuffle: false
