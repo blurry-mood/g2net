@@ -1,5 +1,7 @@
 import os
 
+from torch._C import device
+
 from tqdm.auto import tqdm
 from nnAudio.Spectrogram import STFT
 from omegaconf import OmegaConf
@@ -10,7 +12,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 _TRANSFORMS = {'stft': STFT}
-
+_CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
 
 class _Dataset(Dataset):
 
@@ -56,7 +58,7 @@ def _get_transform(config):
     return transform
 
 
-def preprocess(yml_path, dataset_path, output_path, device='cpu'):
+def _preprocess(yml_path, dataset_path, output_path, device):
     # read preprocessing pipeline
     config = _read_config(yml_path)
     # read stacking integer
@@ -85,7 +87,7 @@ def preprocess(yml_path, dataset_path, output_path, device='cpu'):
 
         for i in range(specs.shape[0]//3):
             # output path
-            name = os.path.join(output_path, npys[paths[i]].split(os.sep)[-1])
+            name = os.path.join(output_path, os.path.split(npys[paths[i]])[-1])
             # concatenate the 3 detector signal
             list = [specs[i+j:i+j+i] for j in range(3)]
             spec = np.concatenate(list, axis=stacking)
@@ -93,3 +95,6 @@ def preprocess(yml_path, dataset_path, output_path, device='cpu'):
             spec = (spec - mean) /std
             # save
             np.save(name, spec)
+
+def stft(in_path, out_path, device):
+    _preprocess(os.path.join(_CONFIGS, 'stft.yaml'), in_path, out_path, device)
