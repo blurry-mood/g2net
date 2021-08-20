@@ -73,7 +73,7 @@ def _preprocess(yml_path, dataset_path, output_path, device):
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
     npys = glob(dataset_path+os.sep+'**'+os.sep+'*.npy')
-    _logger.info(f'{len(npys)} files have been found')
+    _logger.warning(f'{len(npys)} files have been found')
 
     # create dataset & dataloader
     dataset = _Dataset(npys)
