@@ -1,4 +1,5 @@
 import os
+import logging
 
 from tqdm.auto import tqdm
 from nnAudio.Spectrogram import STFT
@@ -9,6 +10,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 
+_logger = logging.getLogger(__name__)
 _TRANSFORMS = {'stft': STFT}
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
 
@@ -70,7 +72,7 @@ def _preprocess(yml_path, dataset_path, output_path, device):
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
     npys = glob(dataset_path+os.sep+'**'+os.sep+'*.npy')
-    print(f'{len(npys)} files have been found')
+    _logger.info(f'{len(npys)} files have been found')
 
     # create dataset & dataloader
     dataset = _Dataset(npys)
