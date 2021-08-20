@@ -72,11 +72,11 @@ def _preprocess(yml_path, dataset_path, output_path, device):
     
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
-    npys = glob(dataset_path+os.sep+'**'+os.sep+'*.npy')
+    npys = glob(os.path.join(dataset_path,'**','.npy'))
     # logging messages
-    _logger.info(f'The path of existing files:', dataset_path)
-    _logger.info(f'The preprocessed files will be saved under:', output_path)
-    _logger.info(f'{len(npys)} files have been found')
+    _logger.error(f'The path of existing files:', os.path.join(dataset_path,'**','.npy'))
+    _logger.error(f'The preprocessed files will be saved under:', output_path)
+    _logger.error(f'{len(npys)} files have been found')
 
     # create dataset & dataloader
     dataset = _Dataset(npys)
