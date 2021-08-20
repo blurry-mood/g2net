@@ -1,7 +1,5 @@
 import os
 
-from torch._C import device
-
 from tqdm.auto import tqdm
 from nnAudio.Spectrogram import STFT
 from omegaconf import OmegaConf
@@ -98,3 +96,7 @@ def _preprocess(yml_path, dataset_path, output_path, device):
 
 def stft(in_path, out_path, device):
     _preprocess(os.path.join(_CONFIGS, 'stft.yaml'), in_path, out_path, device)
+
+
+def mel(in_path, out_path, device):
+    _preprocess(os.path.join(_CONFIGS, 'mel.yaml'), in_path, out_path, device)
