@@ -91,7 +91,7 @@ def _preprocess(yml_path, dataset_path, output_path, device):
         paths = paths.tolist()
         ts = ts.to(device)
         # compute spectrogram
-        specs = tranform(ts).detach().cpu().numpy()
+        specs = tranform(ts).cpu().numpy()
 
         for i in range(specs.shape[0]//3):
             # output path
