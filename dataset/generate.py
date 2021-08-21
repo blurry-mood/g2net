@@ -2,37 +2,20 @@ import os
 import logging
 
 from tqdm.auto import tqdm
-from nnAudio.Spectrogram import STFT
+from nnAudio.Spectrogram import STFT, MelSpectrogram
 from omegaconf import OmegaConf
 from os.path import abspath
 from glob import glob
 import numpy as np
-import torch
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
+from datasets import TransformDataset
+
 
 logging.basicConfig(level=logging.INFO)
 _logger = logging.getLogger()
 
-_TRANSFORMS = {'stft': STFT}
+_TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
-
-class _Dataset(Dataset):
-
-    def __init__(self, paths) -> None:
-        super().__init__()
-        self.paths = paths
-
-    def __len__(self):
-        return len(self.paths)
-
-    def __getitem__(self, i):
-        return i, np.load(self.paths[i]).astype('float32')
-
-
-def _collate(batch):
-    paths, ts = zip(*batch)
-    return torch.tensor(paths), torch.cat(list(map(torch.from_numpy, ts)))
-
 
 def _validate_config(config):
     assert config.transform is not None
@@ -60,7 +43,7 @@ def _get_transform(config):
     return transform
 
 
-def _preprocess(yml_path, dataset_path, output_path, device):
+def _preprocess(yml_path, dataset_path, output_path):
     # read preprocessing pipeline
     config = _read_config(yml_path)
     # read stacking integer
@@ -69,7 +52,7 @@ def _preprocess(yml_path, dataset_path, output_path, device):
     mean, std = map(np.array, config.scaling)
 
     # create spectrogram tansform 
-    tranform = _get_transform(config).to(device)
+    transform = _get_transform(config)
     
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
@@ -82,31 +65,24 @@ def _preprocess(yml_path, dataset_path, output_path, device):
     _logger.info(f'{len(npys)} files have been found')
 
     # create dataset & dataloader
-    dataset = _Dataset(npys)
-    dataloader = DataLoader(dataset, collate_fn=_collate,
-                            **dict(config.dataloader))
+    dataset = TransformDataset(npys, transform)
+    dataloader = DataLoader(dataset, **dict(config.dataloader))
 
-    for paths, ts in tqdm(dataloader):
-        paths = paths.tolist()
-        ts = ts.to(device)
-        # compute spectrogram
-        specs = tranform(ts).detach().cpu().numpy()
-        assert len(paths)*3 == specs.shape[0]
+    for inds, specs in tqdm(dataloader):
+        inds = inds.tolist()
+        specs = specs.numpy()
 
-        for i in range(0, specs.shape[0], 3):
+        for i in range(specs.shape[0]):
             # output path
-            name = os.path.join(output_path, os.path.split(npys[paths[i//3]])[-1])
-            # concatenate the 3 detector signal
-            list = [specs[i+j:i+j+1] for j in range(3)]
-            spec = np.concatenate(list, axis=stacking)
+            name = os.path.join(output_path, os.path.split(npys[inds[i]])[-1])
             # rescale
-            spec = (spec - mean) /std
+            spec = (specs[i] - mean) /std
             # save
             np.save(name, spec)
 
-def stft(in_path, out_path, device):
-    _preprocess(os.path.join(_CONFIGS, 'stft.yaml'), in_path, out_path, device)
+def stft(in_path, out_path, ):
+    _preprocess(os.path.join(_CONFIGS, 'stft.yaml'), in_path, out_path, )
 
 
-def mel(in_path, out_path, device):
-    _preprocess(os.path.join(_CONFIGS, 'mel.yaml'), in_path, out_path, device)
+def mel(in_path, out_path, ):
+    _preprocess(os.path.join(_CONFIGS, 'mel.yaml'), in_path, out_path, )
