@@ -87,13 +87,13 @@ def _preprocess(yml_path, dataset_path, output_path, device):
                             **dict(config.dataloader))
 
     for paths, ts in tqdm(dataloader):
-        # 
         paths = paths.tolist()
         ts = ts.to(device)
         # compute spectrogram
         specs = tranform(ts).detach().cpu().numpy()
+        assert len(paths)*3 == specs.shape[0]
 
-        for i in range(0, specs.shape[0],3):
+        for i in range(0, specs.shape[0], 3):
             # output path
             name = os.path.join(output_path, os.path.split(npys[paths[i//3]])[-1])
             # concatenate the 3 detector signal
