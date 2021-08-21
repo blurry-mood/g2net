@@ -95,9 +95,9 @@ def _preprocess(yml_path, dataset_path, output_path, device):
 
         for i in range(0, specs.shape[0],3):
             # output path
-            name = os.path.join(output_path, os.path.split(npys[paths[i]])[-1])
+            name = os.path.join(output_path, os.path.split(npys[paths[i//3]])[-1])
             # concatenate the 3 detector signal
-            list = [specs[i+j:i+j+i] for j in range(3)]
+            list = [specs[i+j:i+j+1] for j in range(3)]
             spec = np.concatenate(list, axis=stacking)
             # rescale
             spec = (spec - mean) /std
