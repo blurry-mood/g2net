@@ -1,5 +1,5 @@
-deepblocks
 OmegaConf
 nnAudio
 timm
 transformers
+deepblocks
