@@ -15,7 +15,7 @@ setup(
     author_email='assis.ayoub@gmail.com',
     license='LICENSE',
 
-    packages=find_packages(),
+    packages=find_packages(include=('gnet')),
 
     install_requires=requirements,
     python_requires='>=3.7',
