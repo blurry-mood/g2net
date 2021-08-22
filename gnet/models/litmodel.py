@@ -1,7 +1,7 @@
 from omegaconf import OmegaConf
 import pytorch_lightning as pl
 import torch
-from model import model
+from .model import model
 from torch import nn
 from deepblocks.loss import FocalLoss
 from torchmetrics import AUROC

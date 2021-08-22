@@ -2,7 +2,7 @@ from typing import Optional
 
 from tqdm.auto import tqdm
 from torch.utils.data import DataLoader
-from datasets import SpecDataset
+from .datasets import SpecDataset
 from torch.utils.data import random_split
 import pytorch_lightning as pl
 from glob import glob
