@@ -8,7 +8,8 @@ from os.path import abspath
 from glob import glob
 import numpy as np
 from torch.utils.data import DataLoader
-from datasets import TransformDataset
+
+from .datasets import TransformDataset
 
 
 logging.basicConfig(level=logging.INFO)
@@ -16,6 +17,7 @@ _logger = logging.getLogger()
 
 _TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
+
 
 def _validate_config(config):
     assert config.transform is not None
@@ -51,15 +53,15 @@ def _preprocess(yml_path, dataset_path, output_path):
     # read normalization vectors
     mean, std = map(np.array, config.scaling)
 
-    # create spectrogram tansform 
+    # create spectrogram tansform
     transform = _get_transform(config)
-    
+
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
-    
+
     _logger.info(f'fetching the files from: {dataset_path}')
 
-    npys = glob(os.path.join(dataset_path,'**','*.npy'), recursive=True)
+    npys = glob(os.path.join(dataset_path, '**', '*.npy'), recursive=True)
     # logging messages
     _logger.info(f'The preprocessed files will be saved under: {output_path}')
     _logger.info(f'{len(npys)} files have been found')
@@ -76,9 +78,10 @@ def _preprocess(yml_path, dataset_path, output_path):
             # output path
             name = os.path.join(output_path, os.path.split(npys[inds[i]])[-1])
             # rescale
-            spec = (specs[i] - mean) /std
+            spec = (specs[i] - mean) / std
             # save
             np.save(name, spec)
+
 
 def stft(in_path, out_path, ):
     _preprocess(os.path.join(_CONFIGS, 'stft.yaml'), in_path, out_path, )
