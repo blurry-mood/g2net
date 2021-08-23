@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 
 if __name__=='__main__':
     from datasets import TransformDataset
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(filename)s:%(lineno)s - %(levelname)s:%(message)s', force=1)
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(filename)s:%(lineno)s - %(levelname)s:%(message)s')
     _logger = logging.getLogger()
 else:
     from .datasets import TransformDataset
@@ -65,7 +65,7 @@ def _preprocess(yml_path, dataset_path, output_path):
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
 
-    _logger.info(f'fetching the files from: {dataset_path}')
+    _logger.info(f'Fetching the files from: {dataset_path}')
 
     npys = glob(os.path.join(dataset_path, '**', '*.npy'), recursive=True)
     # logging messages
