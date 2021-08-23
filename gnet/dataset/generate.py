@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 
 from tqdm.auto import tqdm
@@ -12,7 +13,7 @@ from torch.utils.data import DataLoader
 from .datasets import TransformDataset
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(stream = sys.stderr, level=logging.INFO, format='%(filename)s:%(lineno)s %(levelname)s:%(message)s')
 _logger = logging.getLogger()
 
 _TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
