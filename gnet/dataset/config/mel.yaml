@@ -10,7 +10,7 @@ transform:
   pad_mode: constant            # reflect
   fmin: 20
   fmax: 500
-  norm: 0                       # if 1, divide the triangular mel weights by the width of the mel band (area normalization, AKA ‘slaney’ default in librosa). Otherwise, leave all the triangles aiming for a peak value of 1.0
+  norm: 1                       # if 1, divide the triangular mel weights by the width of the mel band (area normalization, AKA ‘slaney’ default in librosa). Otherwise, leave all the triangles aiming for a peak value of 1.0
   trainable_STFT: false
   trainable_mel: false    
   verbose: false
