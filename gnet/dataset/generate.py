@@ -10,10 +10,13 @@ from glob import glob
 import numpy as np
 from torch.utils.data import DataLoader
 
-from .datasets import TransformDataset
+if __name__=='__main__':
+    from datasets import TransformDataset
+else:
+    from .datasets import TransformDataset
 
 
-logging.basicConfig(stream = sys.stderr, level=logging.INFO, format='%(filename)s:%(lineno)s %(levelname)s:%(message)s')
+logging.basicConfig(stream = sys.stdout, level=logging.INFO, format='%(filename)s:%(lineno)s %(levelname)s:%(message)s', force=True)
 _logger = logging.getLogger()
 
 _TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
@@ -90,3 +93,6 @@ def stft(in_path, out_path, ):
 
 def mel(in_path, out_path, ):
     _preprocess(os.path.join(_CONFIGS, 'mel.yaml'), in_path, out_path, )
+
+
+stft('data', 'data2')
