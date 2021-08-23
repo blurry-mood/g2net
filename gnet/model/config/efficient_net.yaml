@@ -1,4 +1,4 @@
-model_name: efficientnetv2_s
+model_name: efficientnet_b0
 pretrained: false
 num_outputs: 2
 loss:
@@ -24,6 +24,6 @@ split:
   val: .2
   test: .2
 trainer:
-  epochs: 10
-  train_batch_limit: 1024
-  val_batch_limit: 128
+  max_epochs: 10
+  limit_train_batches: 1024
+  limit_val_batches: 128

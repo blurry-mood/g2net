@@ -8,6 +8,10 @@ from torchmetrics import AUROC
 from transformers import AdamW, get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
 from torch.optim import Adam, SGD
 from torch.optim.lr_scheduler import StepLR
+import logging
+
+logging.basicConfig(level=logging.INFO)
+_logger = logging.getLogger()
 
 _LOSS = {'celoss': nn.CrossEntropyLoss, 'focalloss': FocalLoss, 'bceloss':nn.BCEWithLogitsLoss}
 _OPT = {'adamw': AdamW, 'adam': Adam, 'sgd': SGD}
@@ -17,20 +21,22 @@ _SCHEDULER = {'linear': get_linear_schedule_with_warmup,
 
 class LitModel(pl.LightningModule):
 
-    def __init__(self, cfg_path):
+    def __init__(self, config):
         super().__init__()
 
-        config = OmegaConf.load(cfg_path)
         self.config = config
 
         self.model = model(config.model_name,
                            config.pretrained, config.num_classes)
-        self.loss = _LOSS[config.loss.name](**dict(config.loss.args))
+        self.loss = _LOSS[config.loss.name]
+        if config.loss.args:
+            self.loss = self.loss(**dict(config.loss.args))
+        
         self.auc = AUROC(config.num_classes, compute_on_step=True)
 
     def configure_optimizers(self):
-        opt = _OPT[self.config.opt.name](
-            self.parameters(), **dict(self.config.opt.args))
+        opt = _OPT[self.config.optimizer.name](
+            self.parameters(), **dict(self.config.optimizer.args))
         scheduler = _SCHEDULER[self.config.scheduler.name](
             opt, **dict(self.config.scheduler.args))
         return [opt], [scheduler]
