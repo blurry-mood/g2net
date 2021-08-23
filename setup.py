@@ -15,6 +15,7 @@ setup(
     author_email='assis.ayoub@gmail.com',
     license='LICENSE',
 
+    package_data= {'': ['config/*']}, # Look inside every package for the config directory
     packages=find_packages(),
 
     install_requires=requirements,
