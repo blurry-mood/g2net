@@ -1,6 +1,6 @@
 transform: 
   name: mel                     # melspectrogram, cqt, dft, 
-  freq_scale: linear            # linear, log, no; relies on the fmin, fmax values
+  # freq_scale: linear            # linear, log, no; relies on the fmin, fmax values
   sr: 2048                      # sampling rate
   n_fft: 128                    # could be a list to denote computing multiple transform for different values of n_fft
   win_length: 128               # should be less than n_fft
