@@ -69,6 +69,7 @@ def _preprocess(yml_path, dataset_path, output_path):
     # logging messages
     _logger.info(f'The preprocessed files will be saved under: {output_path}')
     _logger.info(f'{len(npys)} files have been found')
+    print(f'{len(npys)} files have been found')
 
     # create dataset & dataloader
     dataset = TransformDataset(npys, transform)
