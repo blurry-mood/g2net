@@ -12,12 +12,14 @@ from torch.utils.data import DataLoader
 
 if __name__=='__main__':
     from datasets import TransformDataset
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(filename)s:%(lineno)s - %(levelname)s:%(message)s', force=1)
+    _logger = logging.getLogger()
 else:
     from .datasets import TransformDataset
+    from ..utils import get_logger
+    _logger = get_logger()
 
 
-logging.basicConfig(stream = sys.stdout, level=logging.INFO, format='%(filename)s:%(lineno)s %(levelname)s:%(message)s', force=True)
-_logger = logging.getLogger()
 
 _TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
@@ -69,7 +71,6 @@ def _preprocess(yml_path, dataset_path, output_path):
     # logging messages
     _logger.info(f'The preprocessed files will be saved under: {output_path}')
     _logger.info(f'{len(npys)} files have been found')
-    print(f'{len(npys)} files have been found')
 
     # create dataset & dataloader
     dataset = TransformDataset(npys, transform)
