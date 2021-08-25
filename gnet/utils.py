@@ -5,7 +5,7 @@ def get_logger(name=''):
     logger.setLevel(INFO)
 
     # formatter
-    fmr = Formatter('%(filename)s:%(lineno)s - %(levelname)s:\t%(message)s'.expandtabs(8))
+    fmr = Formatter('%(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
 
     # stream handler
     ch = StreamHandler()
