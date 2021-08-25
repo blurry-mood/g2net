@@ -95,6 +95,3 @@ def stft(in_path, out_path, ):
 
 def mel(in_path, out_path, ):
     _preprocess(os.path.join(_CONFIGS, 'mel.yaml'), in_path, out_path, )
-
-
-stft('data', 'data2')
