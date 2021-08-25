@@ -5,7 +5,7 @@ def get_logger(name=''):
     logger.setLevel(INFO)
 
     # formatter
-    fmr = Formatter('%(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
+    fmr = Formatter('gnet: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
 
     # stream handler
     ch = StreamHandler()
