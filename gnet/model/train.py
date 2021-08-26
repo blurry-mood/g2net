@@ -3,8 +3,10 @@ from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks import LearningRateMonitor
+import torch
 import wandb
 import os
+
 
 def train(cfg_name, data_path):
     cfg = os.path.join(os.path.split(__file__)[0], 'config', cfg_name+'.yaml')
@@ -20,15 +22,17 @@ def train(cfg_name, data_path):
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
 
     # trainer
-    trainer = Trainer(**dict(cfg.trainer),
-                      callbacks=[lr_monitor], logger=logger)
+    trainer = Trainer(
+        gpus=-1 if torch.cuda.is_available() else 0,
+        **dict(cfg.trainer),
+        callbacks=[lr_monitor], logger=logger)
 
     # Fit and test
     trainer.fit(litmodel, dm)
     trainer.test(litmodel)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     from gnet.dataset.datamodules import DataModule
     from gnet.model.litmodel import LitModel
 
@@ -45,6 +49,6 @@ if __name__=='__main__':
 
     train(cfg, data_path)
 
-else: 
+else:
     from ..dataset.datamodules import DataModule
     from .litmodel import LitModel
