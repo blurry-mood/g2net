@@ -45,6 +45,7 @@ class LitModel(pl.LightningModule):
         return [opt], [scheduler]
 
     def forward(self, x):
+        x = x.unsqueeze(1)
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
