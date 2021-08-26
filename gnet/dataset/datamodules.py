@@ -26,13 +26,14 @@ class DataModule(pl.LightningDataModule):
         csv = glob(os.path.join(self.path, '*.csv'))[0]
 
         _logger.info(f'{len(paths)} data sample has been found')
-        _logger.info(f'The csv file is found in: {csv}')
+        _logger.info(f'The csv file is found: {csv}')
 
         df = pd.read_csv(csv)
         labels = []
+        dictt = {row[0]:row[1] for row in df.values}
         for path in tqdm(paths):
             name = os.path.split(path)[-1].split('.')[0]
-            labels.append(df[df.id == name].target.values[0])
+            labels.append(dictt.pop(name))
 
         self.dataset = SpecDataset(paths, labels)
 
