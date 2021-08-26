@@ -7,6 +7,7 @@ import torch
 import wandb
 import os
 
+torch.backends.cudnn.benchmark = True
 
 def train(cfg_name, data_path):
     cfg = os.path.join(os.path.split(__file__)[0], 'config', cfg_name+'.yaml')
