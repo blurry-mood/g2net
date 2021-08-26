@@ -17,7 +17,6 @@ def train(cfg_name, data_path):
     dm = DataModule(data_path, cfg.datamodule, cfg.split)
 
     # wandb logger & lr monitor
-    wandb.login()
     logger = WandbLogger(entity='blurry-mood', project='g2net')
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
 
@@ -30,6 +29,7 @@ def train(cfg_name, data_path):
     # Fit and test
     trainer.fit(litmodel, dm)
     trainer.test(litmodel)
+    wandb.finish(0)
 
 
 if __name__ == '__main__':
