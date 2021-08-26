@@ -13,9 +13,7 @@ from .datasets import TransformDataset
 from .transforms import get_nnaudio_transform
 from ..utils import get_logger
 
-
 _logger = get_logger()
-
 
 
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')

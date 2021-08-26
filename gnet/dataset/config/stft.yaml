@@ -19,5 +19,5 @@ scaling:                        # rescale the values to, e.g, [-1, 1]
   - 0
   - 1e-21
 dataloader:
-  batch_size: 256
+  batch_size: 32
   num_workers: 4
