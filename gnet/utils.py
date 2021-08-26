@@ -1,27 +1,23 @@
 from logging import DEBUG, INFO, getLogger, Formatter, StreamHandler
 
 __all__ = ['get_logger']
-__logger = None
 
 def get_logger():
-    global __logger
-    if __logger is not None:
-        return __logger
     logger = getLogger('G2Net')
     logger.setLevel(DEBUG)
 
     # formatter
-    fmr = _ColoredFormatter('%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
 
     # stream handler
-    ch = StreamHandler()
-    ch.setLevel(DEBUG)
-    ch.setFormatter(fmr)
+    if not logger.hasHandlers():
+        fmr = _ColoredFormatter('%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
+        ch = StreamHandler()
+        ch.setLevel(DEBUG)
+        ch.setFormatter(fmr)
 
-    logger.addHandler(ch)
-    __logger = logger
+        logger.addHandler(ch)
     
-    return __logger
+    return logger
 
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
