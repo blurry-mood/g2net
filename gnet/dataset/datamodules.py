@@ -31,7 +31,7 @@ class DataModule(pl.LightningDataModule):
         df = pd.read_csv(csv)
         labels = []
         dictt = {row[0]:row[1] for row in df.values}
-        for path in tqdm(paths):
+        for path in tqdm(paths, desc='Map inputs to labels', leave=True):
             name = os.path.split(path)[-1].split('.')[0]
             labels.append(dictt.pop(name))
 
