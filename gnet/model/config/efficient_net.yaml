@@ -17,9 +17,9 @@ scheduler:
 datamodule:
   num_workers: 2
   batch_size: 512
-  shuffle: false
+  shuffle: true
   pin_memory: true
-  prefetch_factor: 256
+  prefetch_factor: 512
 split: 
   val: .05
   test: .1
