@@ -1,27 +1,22 @@
 import os
-import sys
-import logging
 
 from tqdm.auto import tqdm
-from nnAudio.Spectrogram import STFT, MelSpectrogram
 from omegaconf import OmegaConf
 from os.path import abspath
 from glob import glob
 import numpy as np
 from torch.utils.data import DataLoader
 
-if __name__=='__main__':
-    from datasets import TransformDataset
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(filename)s:%(lineno)s - %(levelname)s:%(message)s')
-    _logger = logging.getLogger()
-else:
-    from .datasets import TransformDataset
-    from ..utils import get_logger
-    _logger = get_logger()
+
+from .datasets import TransformDataset
+from .transforms import get_nnaudio_transform
+from ..utils import get_logger
+
+
+_logger = get_logger()
 
 
 
-_TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
 
 
@@ -42,25 +37,18 @@ def _read_config(yml_path):
     return config
 
 
-def _get_transform(config):
-    transform = config.transform.name
-    transform = _TRANSFORMS[transform]
-    args = dict(config.transform)
-    args.pop('name', None)
-    transform = transform(**args)
-    return transform
-
-
 def _preprocess(yml_path, dataset_path, output_path):
     # read preprocessing pipeline
     config = _read_config(yml_path)
+    
     # read stacking integer
     stacking = config.stacking
+
     # read normalization vectors
     mean, std = map(np.array, config.scaling)
 
     # create spectrogram tansform
-    transform = _get_transform(config)
+    transform = get_nnaudio_transform(config)
 
     # fetch the training data files
     dataset_path, output_path = map(abspath, [dataset_path, output_path])
@@ -87,6 +75,8 @@ def _preprocess(yml_path, dataset_path, output_path):
             spec = (specs[i] - mean) / std
             # save
             np.save(name, spec)
+    
+    _logger.info('The data generation process is finished')
 
 
 def stft(in_path, out_path, ):

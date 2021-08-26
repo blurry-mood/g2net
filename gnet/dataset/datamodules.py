@@ -2,17 +2,16 @@ from typing import Optional
 
 from tqdm.auto import tqdm
 from torch.utils.data import DataLoader
-from .datasets import SpecDataset
 from torch.utils.data import random_split
 import pytorch_lightning as pl
 from glob import glob
 import os
 import pandas as pd
-import logging
 
-logging.basicConfig(level=logging.INFO)
-_logger = logging.getLogger()
+from .datasets import SpecDataset
+from ..utils import get_logger
 
+_logger = get_logger()
 
 class DataModule(pl.LightningDataModule):
 
