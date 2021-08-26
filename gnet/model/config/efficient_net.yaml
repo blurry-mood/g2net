@@ -8,15 +8,15 @@ optimizer:
   name: adamw
   args:
     lr: 1e-2
-    weight_decay: 1e-5
+    weight_decay: 0
 scheduler:
-  name: step
+  name: cosine
   args:
-    step_size: 3
-    gamma: 0.1
+    num_warmup_steps: 3
+    num_training_steps: 14
 datamodule:
   num_workers: 8
-  batch_size: 512
+  batch_size: 256
   # shuffle: true
   pin_memory: true
   # prefetch_factor: 2
@@ -25,5 +25,5 @@ split:
   test: .1
 trainer:
   max_epochs: 10
-  limit_train_batches: 1024
-  limit_val_batches: 128
+  # limit_train_batches: 1024
+  limit_val_batches: 64
