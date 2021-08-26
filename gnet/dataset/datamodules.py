@@ -36,6 +36,7 @@ class DataModule(pl.LightningDataModule):
             labels.append(dictt.pop(name))
 
         self.dataset = SpecDataset(paths, labels)
+        _logger.info("The dataset is successfully created")
 
     def setup(self, stage: Optional[str]):
         if stage == 'fit' or stage is None:
@@ -45,6 +46,7 @@ class DataModule(pl.LightningDataModule):
             train = n - (test + val)
             self.train, self.val, self.test = random_split(
                 self.dataset, [train, val, test])
+            _logger.info(f"The dataset split is successfully performed: train={train}, val={val}, test={test}")
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train, **self.config)
