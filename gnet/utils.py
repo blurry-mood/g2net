@@ -1,8 +1,12 @@
 from logging import INFO, getLogger, Formatter, StreamHandler
 
 __all__ = ['get_logger']
+__logger = None
 
 def get_logger():
+    global __logger
+    if __logger is not None:
+        return __logger
     logger = getLogger()
     logger.setLevel(INFO)
 
@@ -15,5 +19,6 @@ def get_logger():
     ch.setFormatter(fmr)
 
     logger.addHandler(ch)
-
-    return logger
+    __logger = logger
+    
+    return __logger
