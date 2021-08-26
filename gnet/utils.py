@@ -1,12 +1,15 @@
 from logging import DEBUG, INFO, getLogger, Formatter, StreamHandler
 
 __all__ = ['get_logger']
+_first = True
 
 def get_logger():
+    global _first
     logger = getLogger('G2Net')
 
     # stream handler
-    if not logger.hasHandlers():
+    if _first:
+        _first = False
         logger.setLevel(INFO)
         fmr = _ColoredFormatter('%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
         ch = StreamHandler()
