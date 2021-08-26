@@ -1,30 +1,36 @@
-from logging import DEBUG, INFO, getLogger, Formatter, StreamHandler
+import os
+from logging import DEBUG, INFO, Formatter, StreamHandler, getLogger
 
-__all__ = ['get_logger']
-_first = True
 
 def get_logger():
-    global _first
     logger = getLogger('G2Net')
 
-    # stream handler
-    if _first:
-        _first = False
-        logger.setLevel(INFO)
-        fmr = _ColoredFormatter('%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
-        ch = StreamHandler()
-        ch.setLevel(INFO)
-        ch.setFormatter(fmr)
+    fname = os.path.join(os.path.split(
+        os.path.abspath(__file__))[0], 'logger.bool')
+    if os.path.isfile(fname):
+        return logger
 
-        logger.addHandler(ch)
-    
+    # Save state using this file
+    with open(fname, 'w') as f:
+        f.write('check')
+
+    # stream handler
+    logger.setLevel(DEBUG)
+    fmr = _ColoredFormatter(
+        '%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
+    ch = StreamHandler()
+    ch.setLevel(DEBUG)
+    ch.setFormatter(fmr)
+
+    logger.addHandler(ch)
+
     return logger
 
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
-#The background is set with 40 plus the number of the color, and the foreground with 30
+# The background is set with 40 plus the number of the color, and the foreground with 30
 
-#These are the sequences need to get colored ouput
+# These are the sequences need to get colored ouput
 RESET_SEQ = "\033[0m"
 COLOR_SEQ = "\033[;%dm"
 BOLD_COLOR_SEQ = "\033[1;%dm"
@@ -37,15 +43,17 @@ _COLORS = {
     'ERROR': RED
 }
 
+
 class _ColoredFormatter(Formatter):
-    def __init__(self, msg, use_color = True):
+    def __init__(self, msg, use_color=True):
         Formatter.__init__(self, msg)
         self.use_color = use_color
 
     def format(self, record):
         levelname = record.levelname
         if self.use_color and levelname in _COLORS:
-            levelname_color = COLOR_SEQ % (30 + _COLORS[levelname]) + levelname + RESET_SEQ
+            levelname_color = COLOR_SEQ % (
+                30 + _COLORS[levelname]) + levelname + RESET_SEQ
             record.levelname = levelname_color
 
         # name
