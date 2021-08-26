@@ -8,7 +8,7 @@ optimizer:
   name: adamw
   args:
     lr: 1e-3
-    weight_decay: 1e-3
+    weight_decay: 1e-2
 scheduler:
   name: step
   args:
@@ -16,13 +16,13 @@ scheduler:
     gamma: 0.1
 datamodule:
   num_workers: 2
-  batch_size: 128
+  batch_size: 512
   shuffle: false
   pin_memory: true
-  prefetch_factor: 64
+  prefetch_factor: 256
 split: 
-  val: .2
-  test: .2
+  val: .05
+  test: .1
 trainer:
   max_epochs: 10
   limit_train_batches: 1024
