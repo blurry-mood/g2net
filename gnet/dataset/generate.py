@@ -1,3 +1,4 @@
+from logging import log
 import os
 
 from tqdm.auto import tqdm
@@ -14,7 +15,6 @@ from ..utils import get_logger
 
 
 _logger = get_logger()
-
 
 
 _CONFIGS = os.path.join(os.path.split(__file__)[0], 'config')
@@ -40,7 +40,7 @@ def _read_config(yml_path):
 def _preprocess(yml_path, dataset_path, output_path):
     # read preprocessing pipeline
     config = _read_config(yml_path)
-    
+
     # read stacking integer
     stacking = config.stacking
 
@@ -63,6 +63,7 @@ def _preprocess(yml_path, dataset_path, output_path):
     # create dataset & dataloader
     dataset = TransformDataset(npys, transform)
     dataloader = DataLoader(dataset, **dict(config.dataloader))
+    log_size = True
 
     for inds, specs in tqdm(dataloader):
         inds = inds.tolist()
@@ -72,10 +73,17 @@ def _preprocess(yml_path, dataset_path, output_path):
             # output path
             name = os.path.join(output_path, os.path.split(npys[inds[i]])[-1])
             # rescale
-            spec = (specs[i] - mean) / std
+            spec = (spec[i] - mean) / std
+            # stack along this axis: `stacking`
+            spec = np.concatenate([spec[_i] for _i in range(3)], axis=stacking)
+
+            if log_size:
+                log_size = False
+                _logger.info(f'The new input shape: {spec.shape}')
+
             # save
             np.save(name, spec)
-    
+
     _logger.info('The data generation process is finished')
 
 
