@@ -1,28 +1,30 @@
 import os
-from logging import DEBUG, INFO, Formatter, StreamHandler, getLogger
+from logging import DEBUG, INFO, Formatter, Handler, StreamHandler, getLogger
+
+
+class MyHandler(StreamHandler):
+
+    def __init__(self, ):
+        super().__init__()
 
 
 def get_logger():
     logger = getLogger('G2Net')
 
-    fname = os.path.join(os.path.split(
-        os.path.abspath(__file__))[0], 'logger.bool')
-    if os.path.isfile(fname):
-        return logger
+    cond = True
+    for handler in logger.handlers:
+        if isinstance(handler, MyHandler):
+            cond = False
 
-    # Save state using this file
-    with open(fname, 'w') as f:
-        f.write('check')
-
-    # stream handler
-    logger.setLevel(DEBUG)
-    fmr = _ColoredFormatter(
-        '%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
-    ch = StreamHandler()
-    ch.setLevel(DEBUG)
-    ch.setFormatter(fmr)
-
-    logger.addHandler(ch)
+    if cond:
+        # stream handler
+        logger.setLevel(DEBUG)
+        fmr = _ColoredFormatter(
+            '%(name)s: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
+        ch = MyHandler()
+        ch.setLevel(DEBUG)
+        ch.setFormatter(fmr)
+        logger.addHandler(ch)
 
     return logger
 
