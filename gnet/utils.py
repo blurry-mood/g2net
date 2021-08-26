@@ -1,4 +1,4 @@
-from logging import INFO, getLogger, Formatter, StreamHandler
+from logging import DEBUG, INFO, getLogger, Formatter, StreamHandler
 
 __all__ = ['get_logger']
 __logger = None
@@ -8,14 +8,14 @@ def get_logger():
     if __logger is not None:
         return __logger
     logger = getLogger()
-    logger.setLevel(INFO)
+    logger.setLevel(DEBUG)
 
     # formatter
     fmr = _ColoredFormatter('G2Net: %(filename)s:%(lineno)s - %(levelname)s:  %(message)s')
 
     # stream handler
     ch = StreamHandler()
-    ch.setLevel(INFO)
+    ch.setLevel(DEBUG)
     ch.setFormatter(fmr)
 
     logger.addHandler(ch)
@@ -34,7 +34,7 @@ BOLD_SEQ = "\033[1m"
 
 _COLORS = {
     'WARNING': YELLOW,
-    'INFO': WHITE,
+    'INFO': GREEN,
     'DEBUG': BLUE,
     'CRITICAL': YELLOW,
     'ERROR': RED
