@@ -52,10 +52,10 @@ class LitModel(pl.LightningModule):
         y_hat = self(x)
         
         loss = self.loss(y_hat, y)
-        # if isinstance(self.loss, nn.BCELoss):
-        #     probs = torch.sigmoid(y_hat)
-        # else:
-        probs = torch.softmax(y_hat, dim=1)
+        if isinstance(self.loss, nn.BCELoss):
+            probs = torch.sigmoid(y_hat)
+        else:
+            probs = torch.softmax(y_hat, dim=1)
         auc = self.auc(probs, y)
 
         self.log('train_loss', loss, prog_bar=True)
@@ -67,10 +67,10 @@ class LitModel(pl.LightningModule):
         x, y = batch
         y_hat = self(x)
         loss = self.loss(y_hat, y)
-        # if isinstance(self.loss, nn.BCELoss):
-        #     probs = torch.sigmoid(y_hat)
-        # else:
-        probs = torch.softmax(y_hat, dim=1)
+        if isinstance(self.loss, nn.BCELoss):
+            probs = torch.sigmoid(y_hat)
+        else:
+            probs = torch.softmax(y_hat, dim=1)
         auc = self.auc(probs, y)
 
         self.log('val_loss', loss, prog_bar=True)
@@ -82,10 +82,10 @@ class LitModel(pl.LightningModule):
         x, y = batch
         y_hat = self(x)
         loss = self.loss(y_hat, y)
-        # if isinstance(self.loss, nn.BCELoss):
-        #     probs = torch.sigmoid(y_hat)
-        # else:
-        probs = torch.softmax(y_hat, dim=1)
+        if isinstance(self.loss, nn.BCELoss):
+            probs = torch.sigmoid(y_hat)
+        else:
+            probs = torch.softmax(y_hat, dim=1)
         auc = self.auc(probs, y)
 
         self.log('test_loss', loss, prog_bar=True)

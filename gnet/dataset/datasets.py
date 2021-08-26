@@ -31,4 +31,4 @@ class SpecDataset(Dataset):
     def __getitem__(self, i):
         ts = np.load(self.paths[i]).astype('float32')
         label = self.labels[i]
-        return ts, label
+        return torch.from_numpy(ts), torch.tensor([label])
