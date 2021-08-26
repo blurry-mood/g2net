@@ -74,7 +74,7 @@ def _preprocess(yml_path, dataset_path, output_path):
             # output path
             name = os.path.join(output_path, os.path.split(npys[inds[i]])[-1])
             # rescale
-            spec = (spec[i] - mean) / std
+            spec = (specs[i] - mean) / std
             # stack along this axis: `stacking`
             spec = np.concatenate([spec[_i] for _i in range(3)], axis=stacking)
 
