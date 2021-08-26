@@ -18,8 +18,8 @@ datamodule:
   num_workers: 2
   batch_size: 512
   shuffle: false
-  pin_memory: false
-  # prefetch_factor: 256
+  pin_memory: true
+  prefetch_factor: 256
 split: 
   val: .05
   test: .1
