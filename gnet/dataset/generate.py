@@ -74,7 +74,7 @@ def _preprocess(yml_path, dataset_path, output_path):
             # rescale
             spec = (specs[i] - mean) / std
             # stack along this axis: `stacking`
-            spec = np.concatenate([spec[_i] for _i in range(3)], axis=stacking)
+            spec = np.concatenate([spec[_i][None] for _i in range(3)], axis=stacking)
 
             if log_size:
                 log_size=False
