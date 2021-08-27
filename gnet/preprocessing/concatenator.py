@@ -19,12 +19,7 @@ class FFTStack(nn.Module):
 
     def __init__(self, dim):
         super().__init__()
-        self.dim = dim
-        self.dim2 = 1 if dim >= 0 else 2    # if hori. || verti. stacked, stack along channel dim.; othewise stack hori.
-
+        
     def forward(self, xx: List[torch.Tensor]):
-        for i, x in enumerate(xx):  # len(xx)==3
-            x = torch.cat([x[:, i:i+1] for i in range(3)], dim=2 + self.dim)
-            xx[i] = x
-        x = torch.cat(xx, dim=self.dim2)
+        x = torch.cat(xx, dim=2)
         return x
