@@ -41,7 +41,8 @@ class LitModel(pl.LightningModule):
             self.loss = self.loss()
 
         # metric
-        self.auc = AUROC(config.num_classes, compute_on_step=True)
+        self.train_auc = AUROC(config.num_classes, compute_on_step=True)
+        self.val_auc = AUROC(config.num_classes, compute_on_step=False)
 
         # log
         _logger.info('The model is created')
@@ -68,7 +69,7 @@ class LitModel(pl.LightningModule):
             probs = torch.softmax(y_hat, dim=1)
 
         if len(y.unique()) != 1:
-            auc = self.auc(probs, y)
+            auc = self.train_auc(probs, y)
             self.log('train_auc', auc, prog_bar=True)
 
         self.log('train_loss', loss, prog_bar=True)
@@ -84,13 +85,15 @@ class LitModel(pl.LightningModule):
         else:
             probs = torch.softmax(y_hat, dim=1)
 
-        if len(y.unique()) != 1:
-            auc = self.auc(probs, y)
-            self.log('val_auc', auc, prog_bar=True)
-
+        self.val_auc(probs, y)
+            
         self.log('val_loss', loss, prog_bar=True)
 
         return loss
+
+    def validation_epoch_end(self, outs):
+        self.log('val_auc', self.val_auc.compute(), prog_bar=True)
+
 
     def test_step(self, batch, batch_idx):
         x, y = batch
@@ -101,10 +104,11 @@ class LitModel(pl.LightningModule):
         else:
             probs = torch.softmax(y_hat, dim=1)
 
-        if len(y.unique()) != 1:
-            auc = self.auc(probs, y)
-            self.log('test_auc', auc, prog_bar=True)
+        self.val_auc(probs, y)
 
         self.log('test_loss', loss, prog_bar=True)
 
         return loss
+
+    def test_epoch_end(self, outputs) -> None:
+        self.log('test_auc', self.val_auc.compute(), prog_bar=True)
