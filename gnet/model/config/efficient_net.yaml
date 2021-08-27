@@ -16,7 +16,7 @@ scheduler:
     num_training_steps: 14
 trainer:
   max_epochs: 10
-  limit_train_batches: 1024
+  limit_train_batches: 64
   limit_val_batches: 64
 
   
