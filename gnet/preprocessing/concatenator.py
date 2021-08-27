@@ -11,7 +11,7 @@ class HStack(nn.Module):
 
     def forward(self, x):
         x = torch.cat([x[:, i:i+1] for i in range(3)], dim=2 + self.dim)
-        x = torch.tile(x, dims=[1, 3, 1, 1])
+        x = x.repeat((1, 3, 1, 1))
         return x
 
 
