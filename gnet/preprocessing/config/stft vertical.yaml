@@ -17,4 +17,4 @@ scaling:                        # rescale the values to, e.g, [-1, 1]
   - 0
   - 1e-21
 
-stacking: 0                     # stack signals from the three detectors along this axis: horizontally/vertically
+stacking: 1                     # stack signals from the three detectors along this axis: horizontally/vertically
