@@ -1,8 +1,7 @@
-from copy import deepcopy
 from typing import List
 from nnAudio.Spectrogram import STFT, MelSpectrogram
 import torch
-
+from omegaconf import ListConfig
 
 _TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
 
@@ -16,7 +15,7 @@ def _get_nnaudio_transform(config):
     n_fft = args.pop('n_fft')
 
     # if 3 nfft values are supplied, do the following
-    if isinstance(n_fft, List):
+    if isinstance(n_fft, ListConfig):
         transforms = torch.nn.ModuleList()
         for fft in n_fft:
             transforms.append(transform(n_fft=fft, **args))
