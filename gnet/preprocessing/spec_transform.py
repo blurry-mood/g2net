@@ -8,9 +8,9 @@ _TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
 
 
 def _get_nnaudio_transform(config):
-    transform = config.transform.name
+    transform = config.name
     transform = _TRANSFORMS[transform]
-    args = dict(config.transform)
+    args = dict(config)
     args.pop('name', None)
 
     n_fft = args.pop('n_fft')
