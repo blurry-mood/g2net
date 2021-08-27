@@ -1,11 +1,9 @@
 transform: 
   name: stft                    # melspectrogram, cqt, dft, 
   n_fft: 
-    - 32
+    - 64
     - 128
     - 512                       # could be a list to denote computing multiple transform for different values of n_fft
-  win_length: 512               # should be less than n_fft
-  freq_bins: 256                # by default: n_fft//2+1
   hop_length: 16                # stride
   freq_scale: linear            # linear, log, no; relies on the fmin, fmax values
   center: true                  # kernel centered around the current sample
