@@ -26,7 +26,7 @@ class Preprocessor(nn.Module):
 
         self.spec_transform = SpecTransform(config.transform, config.scaling)
         if self.spec_transform.m_fft:
-            self.concatenator = FFTStack(config.stacking)
+            self.concatenator = FFTStack()
         elif config.stacking>=0:
             self.concatenator = HStack(config.stacking)
         self.stack = self.spec_transform.m_fft or (config.stacking>=0)

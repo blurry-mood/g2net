@@ -17,9 +17,9 @@ class HStack(nn.Module):
 
 class FFTStack(nn.Module):
 
-    def __init__(self, dim):
+    def __init__(self,):
         super().__init__()
-        
+
     def forward(self, xx: List[torch.Tensor]):
         x = torch.cat(xx, dim=2)
         return x
