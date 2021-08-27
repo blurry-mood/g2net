@@ -12,8 +12,10 @@ from ..loader.datamodule import DataModule
 
 torch.backends.cudnn.benchmark = True
 
+_HERE = os.path.split(__file__)[0]
+
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
-    cfg = os.path.join(os.path.split(__file__)[0], 'config', model_cfg_name+'.yaml')
+    cfg = os.path.join(_HERE, 'config', model_cfg_name+'.yaml')
     cfg = OmegaConf.load(cfg)
 
     # model & datamodule

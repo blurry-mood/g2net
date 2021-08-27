@@ -19,7 +19,7 @@ class Preprocessor(nn.Module):
             _HERE, '**', f'{config_name}.yaml'), recursive=True)
         if config == []:
             _logger.error(
-                f'Cannot find the specified config file! {config_name}.yaml do not exist in the config folder')
+                f'Cannot find the specified config file! {config_name}.yaml do not exist in {_HERE}/config')
             raise ValueError()
         config = OmegaConf(config[0])
 
