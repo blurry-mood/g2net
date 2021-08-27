@@ -36,12 +36,13 @@ class DataModule(pl.LightningDataModule):
         self.data_path = data_path
 
     def prepare_data(self):
-        paths = glob(os.path.join(self.data_path,
+        paths = glob(os.path.join(self.data_path, 'train'
                                   '**', '*.npy'), recursive=True)
-        csv = glob(os.path.join(self.data_path, '*.csv'))
+        csv = glob(os.path.join(self.data_path, 'training_labels.csv'))
         if csv == []:
             _logger.error(
                 f'Cannot find the CSV file of labels! No csv file exists within {self.data_path}')
+            raise ValueError()
 
         csv = csv[0]
         _logger.info(f'{len(paths)} data sample has been found')
