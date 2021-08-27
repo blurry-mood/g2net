@@ -14,12 +14,8 @@ transform:
   trainable_STFT: false
   trainable_mel: false    
   verbose: false
-
-stacking: 0                     # stack signals from the three detectors along this axis
 scaling:                        # rescale the values to [-1, 1]
   - 0
   - 1e-19
-dataloader:
-  batch_size: 32
-  num_workers: 4
-  shuffle: false
+
+stacking: 0                     # stack signals from the three detectors along this axis

@@ -13,11 +13,8 @@ transform:
   output_format: Magnitude      # magnitude, complex, phase; for the last two it returns two channels
   trainable: false    
   verbose: false
-
-stacking: 0                     # stack signals from the three detectors along this axis
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 0
   - 1e-21
-dataloader:
-  batch_size: 32
-  num_workers: 4
+
+stacking: 0                     # stack signals from the three detectors along this axis: horizontally/vertically

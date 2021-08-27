@@ -7,15 +7,18 @@ import torch
 import wandb
 import os
 
+from .litmodel import LitModel
+from ..loader.datamodule import DataModule
+
 torch.backends.cudnn.benchmark = True
 
-def train(cfg_name, data_path):
-    cfg = os.path.join(os.path.split(__file__)[0], 'config', cfg_name+'.yaml')
+def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
+    cfg = os.path.join(os.path.split(__file__)[0], 'config', model_cfg_name+'.yaml')
     cfg = OmegaConf.load(cfg)
 
     # model & datamodule
-    litmodel = LitModel(cfg)
-    dm = DataModule(data_path, cfg.datamodule, cfg.split)
+    litmodel = LitModel(cfg, pre_cfg_name)
+    dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
     logger = WandbLogger(entity='blurry-mood', project='g2net')
@@ -30,26 +33,6 @@ def train(cfg_name, data_path):
     # Fit and test
     trainer.fit(litmodel, dm)
     trainer.test(litmodel)
+    
+    # push to cloud
     wandb.finish(0)
-
-
-if __name__ == '__main__':
-    from gnet.dataset.datamodules import DataModule
-    from gnet.model.litmodel import LitModel
-
-    # arguments
-    parser = argparse.ArgumentParser(description='Train Lightning Module.')
-    parser.add_argument('--yaml', type=str, required=True,
-                        help='YAML config file containing the lit model description.')
-    parser.add_argument('--data', type=str, required=True,
-                        help='Path to training dataset. The training folder should contain train_labels.csv with keys [id, target]. Wildcards are supported.')
-    args = parser.parse_args()
-
-    cfg = args.yaml
-    data_path = args.data
-
-    train(cfg, data_path)
-
-else:
-    from ..dataset.datamodules import DataModule
-    from .litmodel import LitModel

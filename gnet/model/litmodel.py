@@ -3,6 +3,7 @@ import torch
 
 from .model import model
 from ..utils import get_logger
+from ..preprocessing.preprocesser import Preprocessor
 
 from torch import nn
 from deepblocks.loss import FocalLoss
@@ -21,20 +22,27 @@ _SCHEDULER = {'linear': get_linear_schedule_with_warmup,
 
 class LitModel(pl.LightningModule):
 
-    def __init__(self, config):
+    def __init__(self, config, preprocess_config_name):
         super().__init__()
 
-        self.config = config
+        self.save_hyperparameters()
 
+        self.config = config
+        self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
                            config.pretrained, config.num_classes)
+        
+        # choose loss
         self.loss = _LOSS[config.loss.name]
         if config.loss.args:
             self.loss = self.loss(**dict(config.loss.args))
         else:
             self.loss = self.loss()
-            
+
+        # metric    
         self.auc = AUROC(config.num_classes, compute_on_step=True)
+        
+        # log
         _logger.info('The model is created')
 
     def configure_optimizers(self):
@@ -45,6 +53,7 @@ class LitModel(pl.LightningModule):
         return [opt], [scheduler]
 
     def forward(self, x):
+        x = self.preprocess(x)
         return self.model(x)
 
     def training_step(self, batch, batch_idx):
