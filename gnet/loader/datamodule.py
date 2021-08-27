@@ -36,8 +36,7 @@ class DataModule(pl.LightningDataModule):
         self.data_path = data_path
 
     def prepare_data(self):
-        paths = glob(os.path.join(self.data_path, 'train'
-                                  '**', '*.npy'), recursive=True)
+        paths = glob(os.path.join(self.data_path, 'train', '**', '*.npy'), recursive=True)
         csv = glob(os.path.join(self.data_path, 'training_labels.csv'))
         if csv == []:
             _logger.error(
