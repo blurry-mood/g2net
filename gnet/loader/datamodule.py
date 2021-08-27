@@ -43,9 +43,13 @@ class DataModule(pl.LightningDataModule):
             _logger.error(
                 f'Cannot find the CSV file of labels! No csv file exists within {self.data_path}')
             raise ValueError()
+        if paths == []:
+            _logger.error(
+                f"Cannot find the numpy files! No npy file exists within {os.path.join(self.data_path, 'train', '**', '*.npy')}")
+            raise ValueError()
 
         csv = csv[0]
-        _logger.info(f'{len(paths)} data sample has been found')
+        _logger.info(f'{len(paths)} data samples have been found')
         _logger.info(f'The csv file is found: {csv}')
 
         df = pd.read_csv(csv)
