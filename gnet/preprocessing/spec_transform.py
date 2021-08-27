@@ -35,9 +35,10 @@ def _transforms(modules: torch.nn.ModuleList, mean: torch.Tensor, std: torch.Ten
 
 
 def _transform(module: torch.nn.Module, mean: torch.Tensor, std: torch.Tensor, x: torch.Tensor):
+    b = x.size(0)
     x = x.flatten(0, 1)
     x = module(x)
-    x = x.unflatten(0, (-1, 3))
+    x = x.unflatten(0, (b, 3))
     x = (x - mean)/std
     return x
 
