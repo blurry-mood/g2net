@@ -19,9 +19,9 @@ class Preprocessor(nn.Module):
             _HERE, '**', f'{config_name}.yaml'), recursive=True)
         if config == []:
             _logger.error(
-                f'Cannot find the specified config file! {config_name}.yaml do not exist in {_HERE}/config')
+                f'Cannot find the specified config file! {config_name}.yaml do not exist in r {_HERE}/config')
             raise ValueError()
-        config = OmegaConf(config[0])
+        config = OmegaConf.load(config[0])
 
         self.spec_transform = SpecTransform(config.transform, config.scaling)
         self.concatenator = FFTStack if self.spec_transform.m_fft else HStack

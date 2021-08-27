@@ -28,7 +28,7 @@ class DataModule(pl.LightningDataModule):
             _logger.error(
                 f'Cannot find the specified config file! {config_name}.yaml do not exist in the config folder')
             raise ValueError()
-        config = OmegaConf(config[0])
+        config = OmegaConf.load(config[0])
 
         # attrs
         self.split = config.split
