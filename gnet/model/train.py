@@ -30,7 +30,9 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     trainer = Trainer(
         gpus=-1 if torch.cuda.is_available() else 0,
         **dict(cfg.trainer),
-        callbacks=[lr_monitor], logger=logger)
+        callbacks=[lr_monitor], 
+        logger=logger
+        )
 
     # Fit and test
     trainer.fit(litmodel, dm)

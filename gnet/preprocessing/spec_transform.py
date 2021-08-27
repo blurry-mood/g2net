@@ -27,15 +27,19 @@ def _get_nnaudio_transform(config):
     return transform
 
 
-def _tranforms(modules: torch.nn.ModuleList, mean: torch.Tensor, std: torch.Tensor, x: torch.Tensor):
+def _transforms(modules: torch.nn.ModuleList, mean: torch.Tensor, std: torch.Tensor, x: torch.Tensor):
     xx = []
     for transform in modules:
-        xx.append((transform(x) - mean) / std)
+        xx.append(_transform(transform, mean, std, x))
     return xx
 
 
 def _transform(module: torch.nn.Module, mean: torch.Tensor, std: torch.Tensor, x: torch.Tensor):
-    return (module(x) - mean)/std
+    x = x.flatten(0, 1)
+    x = module(x)
+    x = x.unflatten(0, (-1, 3))
+    x = (x - mean)/std
+    return x
 
 
 class SpecTransform(torch.nn.Module):
@@ -44,19 +48,21 @@ class SpecTransform(torch.nn.Module):
         super().__init__()
 
         scaling = torch.tensor(scaling)
-        if scaling.shape != (2,): # not the same mean&std for all tensor channels
+        if scaling.shape != (2,):  # not the same mean&std for all tensor channels
             scaling = scaling.unsqueeze(-1).unsqueeze(-1)
         self.mean = scaling[0]
         self.std = scaling[1]
 
         self.mods = _get_nnaudio_transform(config)
         self._mfft = isinstance(
-            self.mods, torch.nn.Module)
-        self.func = _transform if self._mfft else _tranforms
-    
+            self.mods, torch.nn.ModuleList)
+        
+        self.func = _transforms if self._mfft else _transform
+
     @property
     def m_fft(self):
         return self._mfft
 
-    def forward(self, x):
-        return self.func(self.mods, self.mean, self.std, x)
+    def forward(self, x: torch.Tensor):
+        x = self.func(self.mods, self.mean, self.std, x)
+        return x
