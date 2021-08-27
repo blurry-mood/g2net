@@ -106,7 +106,7 @@ class LitModel(pl.LightningModule):
 
         self.val_auc(probs, y)
 
-        self.log('test_loss', loss, prog_bar=True)
+        self.log('test_loss', loss, prog_bar=True, on_step=True)
 
         return loss
 
