@@ -2,8 +2,8 @@ transform:
   name: stft                    # melspectrogram, cqt, dft, 
   n_fft: 
     - 64
-    - 128
-    - 512                       # could be a list to denote computing multiple transform for different values of n_fft
+    - 256
+    - 1024                       # could be a list to denote computing multiple transform for different values of n_fft
   hop_length: 16                # stride
   freq_scale: linear            # linear, log, no; relies on the fmin, fmax values
   center: true                  # kernel centered around the current sample
