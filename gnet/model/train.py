@@ -7,7 +7,7 @@ import torch
 import wandb
 import os
 
-from .litmodel import LitModel
+from .litmodel import BinaryLitModel, MultiLitModel
 from ..loader.datamodule import DataModule
 
 torch.backends.cudnn.benchmark = True
@@ -19,7 +19,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     cfg = OmegaConf.load(cfg)
 
     # model & datamodule
-    litmodel = LitModel(cfg, pre_cfg_name)
+    litmodel = BinaryLitModel(cfg, pre_cfg_name) if cfg.num_classes==1 else MultiLitModel(cfg, pre_cfg_name)
     dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
