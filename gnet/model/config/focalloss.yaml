@@ -4,6 +4,7 @@ num_classes: 2
 loss:
   name: focalloss
   args:
+    cls: true
 optimizer: 
   name: adamw
   args:
