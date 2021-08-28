@@ -4,6 +4,8 @@ num_classes: 1
 loss:
   name: aucloss
   args:
+    skip: true
+    gamma: 0.5
 optimizer: 
   name: adamw
   args:
