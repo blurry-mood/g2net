@@ -6,7 +6,7 @@ loss:
   args:
     skip: true
     gamma: 0.8
-    p: 1
+    p: 1.1
 optimizer: 
   name: adamw
   args:
