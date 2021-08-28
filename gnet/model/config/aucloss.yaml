@@ -5,12 +5,12 @@ loss:
   name: aucloss
   args:
     skip: true
-    gamma: 0.5
+    gamma: 0.8
 optimizer: 
   name: adamw
   args:
-    lr: 1e-2
-    weight_decay: 1e-4
+    lr: 1e-1
+    weight_decay: 0.
 scheduler:
   name: cosine
   args:
