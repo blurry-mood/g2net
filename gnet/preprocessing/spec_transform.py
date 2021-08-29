@@ -26,19 +26,18 @@ def _get_nnaudio_transform(config):
     return transform
 
 
-def _transforms(modules: torch.nn.ModuleList, mean: torch.Tensor, std: torch.Tensor, x: torch.Tensor):
+def _transforms(modules: torch.nn.ModuleList, x: torch.Tensor):
     xx = []
     for transform in modules:
-        xx.append(_transform(transform, mean, std, x))
+        xx.append(_transform(transform, x))
     return xx
 
 
-def _transform(module: torch.nn.Module, mean: torch.Tensor, std: torch.Tensor, x: torch.Tensor):
+def _transform(module: torch.nn.Module, x: torch.Tensor):
     b = x.size(0)
     x = x.flatten(0, 1)
     x = module(x)
     x = x.unflatten(0, (b, 3))
-    x = (x - mean)/std
     return x
 
 
@@ -64,5 +63,6 @@ class SpecTransform(torch.nn.Module):
         return self._mfft
 
     def forward(self, x: torch.Tensor):
-        x = self.func(self.mods, self.mean, self.std, x)
+        x = (x - self.mean)/self.std
+        x = self.func(self.mods, x)
         return x
