@@ -32,6 +32,7 @@ class BinaryLitModel(pl.LightningModule):
         self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
                            config.pretrained, 1)
+        self.show_shape = True
 
         # choose loss
         self.loss = _LOSS[config.loss.name]
@@ -77,6 +78,11 @@ class BinaryLitModel(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
+        if self.show_shape:
+            self.show_shape = False
+            _logger.info(f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
+            xx = self.preprocess(x)
+            _logger.info(f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
         loss = self.loss(y_hat, y)
 
         probs = torch.sigmoid(y_hat)
@@ -119,6 +125,7 @@ class MultiLitModel(pl.LightningModule):
         self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
                            config.pretrained, 2)
+        self.show_shape = True
 
         # choose loss
         self.loss = _LOSS[config.loss.name]
@@ -164,6 +171,12 @@ class MultiLitModel(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
+        if self.show_shape:
+            self.show_shape = False
+            _logger.info(f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
+            xx = self.preprocess(x)
+            _logger.info(f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
+        
         loss = self.loss(y_hat, y)
 
         probs = torch.softmax(y_hat, dim=1)

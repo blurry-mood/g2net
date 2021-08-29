@@ -1,3 +1,3 @@
 from gnet.model.train import train
 
-train('focalloss', 'stft m_fft', 'small', 'data')
+train('celoss', 'mel m_fft', 'small', 'data')
