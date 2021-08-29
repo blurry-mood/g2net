@@ -17,4 +17,4 @@ transform:
 
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 0
-  - 1e-24
+  - 1e-21

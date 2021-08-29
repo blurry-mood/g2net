@@ -1,3 +1,3 @@
 from gnet.model.train import train
 
-train('celoss', 'mel channel', 'small', 'data')
+train('celoss', 'stft channel', 'small', 'data')
