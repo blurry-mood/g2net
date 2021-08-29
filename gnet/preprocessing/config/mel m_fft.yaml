@@ -1,11 +1,12 @@
 transform: 
   name: mel                    # melspectrogram, cqt, dft, 
   n_fft: 
-    - 64
     - 256
-    - 512                       # could be a list to denote computing multiple transform for different values of n_fft
+    - 512
+    - 1024                       # could be a list to denote computing multiple transform for different values of n_fft
   hop_length: 16                # stride
   center: true                  # kernel centered around the current sample
+  n_mels: 256                    # by default: n_fft//2+1
   pad_mode: constant            # reflect
   fmin: 20
   fmax: 500
