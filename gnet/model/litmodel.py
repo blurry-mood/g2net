@@ -63,7 +63,7 @@ class BinaryLitModel(pl.LightningModule):
         x, y = batch
         y_hat = self(x)
 
-        loss = self.loss(y_hat, y)
+        loss = self.loss(y_hat, y.unsqueeze(1))
 
         probs = torch.sigmoid(y_hat)
 
@@ -83,7 +83,7 @@ class BinaryLitModel(pl.LightningModule):
             _logger.info(f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
             xx = self.preprocess(x)
             _logger.info(f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
-        loss = self.loss(y_hat, y)
+        loss = self.loss(y_hat, y.unsqueeze(1))
 
         probs = torch.sigmoid(y_hat)
 
@@ -99,7 +99,7 @@ class BinaryLitModel(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
-        loss = self.loss(y_hat, y)
+        loss = self.loss(y_hat, y.unsqueeze(1))
 
         probs = torch.sigmoid(y_hat)
 
