@@ -65,4 +65,6 @@ class SpecTransform(torch.nn.Module):
     def forward(self, x: torch.Tensor):
         x = (x - self.mean)/self.std
         x = self.func(self.mods, x)
+        min, max = x.min(), x.max()
+        x = min + x/(max - min)
         return x
