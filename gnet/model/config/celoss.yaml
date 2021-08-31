@@ -7,8 +7,8 @@ loss:
 optimizer: 
   name: adamw
   args:
-    lr: 1e-2
-    weight_decay: 1e-4
+    lr: 5e-3
+    weight_decay: 0
 scheduler:
   name: cosine
   args:
