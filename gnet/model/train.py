@@ -40,3 +40,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     
     # push to cloud
     wandb.finish(0)
+
+    trainer.save_checkpoint("litmodel.ckpt")
+    # new_model = BinaryLitModel.load_from_checkpoint(checkpoint_path="litmodel.ckpt")
+
