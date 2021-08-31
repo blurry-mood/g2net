@@ -95,6 +95,7 @@ class BinaryLitModel(pl.LightningModule):
 
     def validation_epoch_end(self, outs):
         self.log('val_auroc', self.val_auroc.compute(), prog_bar=True)
+        self.val_auroc.reset()
 
     def test_step(self, batch, batch_idx):
         x, y = batch
@@ -111,6 +112,7 @@ class BinaryLitModel(pl.LightningModule):
 
     def test_epoch_end(self, outputs) -> None:
         self.log('test_auroc', self.val_auroc.compute(), prog_bar=True)
+        self.val_auroc.reset()
 
 
 
