@@ -25,11 +25,11 @@ class Preprocessor(nn.Module):
         config = OmegaConf.load(config[0])
 
         self.spec_transform = SpecTransform(config.transform, config.scaling)
-        if self.spec_transform.m_fft:
+        if self.spec_transform.multi_win_lengths:
             self.concatenator = FFTStack()
         elif config.stacking>=0:
             self.concatenator = HStack(config.stacking)
-        self.stack = self.spec_transform.m_fft or (config.stacking>=0)
+        self.stack = self.spec_transform.multi_win_lengths or (config.stacking>=0)
 
     def forward(self, x):
         x = self.spec_transform(x)

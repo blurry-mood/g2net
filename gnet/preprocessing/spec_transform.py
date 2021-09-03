@@ -12,16 +12,16 @@ def _get_nnaudio_transform(config):
     args = dict(config)
     args.pop('name', None)
 
-    n_fft = args.pop('n_fft')
+    win_lengths = args.pop('win_length')
 
     # if 3 nfft values are supplied, do the following
-    if isinstance(n_fft, ListConfig):
+    if isinstance(win_lengths, ListConfig):
         transforms = torch.nn.ModuleList()
-        for fft in n_fft:
-            transforms.append(transform(n_fft=fft, **args))
+        for win_length in win_lengths:
+            transforms.append(transform(win_length=win_length, **args))
         return transforms
 
-    transform = transform(n_fft=n_fft, **args)
+    transform = transform(win_length=win_lengths, **args)
 
     return transform
 
@@ -38,7 +38,7 @@ def _transform(module: torch.nn.Module, mean: torch.Tensor, std: torch.Tensor, x
     x = x.flatten(0, 1)
     x = module(x)
     x = x.unflatten(0, (b, 3))
-    x = (x - mean)/std
+    x = x/std - mean
     return x
 
 
@@ -54,14 +54,14 @@ class SpecTransform(torch.nn.Module):
         self.std = scaling[1]
 
         self.mods = _get_nnaudio_transform(config)
-        self._mfft = isinstance(
+        self._win_lengths = isinstance(
             self.mods, torch.nn.ModuleList)
-        
-        self.func = _transforms if self._mfft else _transform
+
+        self.func = _transforms if self._win_lengths else _transform
 
     @property
-    def m_fft(self):
-        return self._mfft
+    def multi_win_lengths(self):
+        return self._win_lengths
 
     def forward(self, x: torch.Tensor):
         x = self.func(self.mods, self.mean, self.std, x)

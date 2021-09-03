@@ -1,7 +1,10 @@
 transform: 
   name: stft                    # melspectrogram, cqt, dft, 
   n_fft: 4096                   # size of fft
-  win_length: 256               # should be less than n_fft
+  win_length: 
+    - 32
+    - 128
+    - 512                      # should be less than n_fft
   window: hann
   freq_bins: 256                # by default: n_fft//2+1
   hop_length: 16                # stride
