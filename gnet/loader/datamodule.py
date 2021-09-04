@@ -11,7 +11,7 @@ import pandas as pd
 
 from omegaconf import OmegaConf
 
-from .dataset import RawDataset
+from .dataset import PredictDataset, RawDataset
 from ..utils import get_logger
 
 _logger = get_logger()
@@ -83,3 +83,35 @@ class DataModule(pl.LightningDataModule):
 
     def test_dataloader(self) -> DataLoader:
         return DataLoader(self.test, **self.dataloader)
+
+    
+class PredictDataModule(pl.LightningDataModule):
+
+    def __init__(self, data_path, config_name, ):
+        super().__init__()
+        config = glob(os.path.join(
+            _HERE, '**', f'{config_name}.yaml'), recursive=True)
+        if config == []:
+            _logger.error(
+                f'Cannot find the specified config file! {config_name}.yaml do not exist in the config folder')
+            raise ValueError()
+        config = OmegaConf.load(config[0])
+
+        # attrs
+        self.dataloader = dict(config.dataloader)
+        self.data_path = data_path
+
+    def prepare_data(self):
+        paths = glob(os.path.join(self.data_path, '**', '*.npy'), recursive=True)
+        if paths == []:
+            _logger.error(
+                f"Cannot find the numpy files! No npy file exists within {os.path.join(self.data_path, '**', '*.npy')}")
+            raise ValueError()
+
+        _logger.info(f'{len(paths)} data samples have been found')
+
+        self.dataset = PredictDataset(paths)
+        _logger.info("The prediction dataset is created")
+
+    def predict_dataloader(self) -> DataLoader:
+        return DataLoader(self.dataset, **self.dataloader, )

@@ -80,9 +80,11 @@ class BinaryLitModel(pl.LightningModule):
         y_hat = self(x)
         if self.show_shape:
             self.show_shape = False
-            _logger.info(f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
+            _logger.info(
+                f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
             xx = self.preprocess(x)
-            _logger.info(f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
+            _logger.info(
+                f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
         loss = self.loss(y_hat, y.unsqueeze(1).float())
 
         probs = torch.sigmoid(y_hat)
@@ -113,7 +115,6 @@ class BinaryLitModel(pl.LightningModule):
     def test_epoch_end(self, outputs) -> None:
         self.log('test_auroc', self.val_auroc.compute(), prog_bar=True)
         self.val_auroc.reset()
-
 
 
 class MultiLitModel(pl.LightningModule):
@@ -175,10 +176,12 @@ class MultiLitModel(pl.LightningModule):
         y_hat = self(x)
         if self.show_shape:
             self.show_shape = False
-            _logger.info(f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
+            _logger.info(
+                f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
             xx = self.preprocess(x)
-            _logger.info(f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
-        
+            _logger.info(
+                f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
+
         loss = self.loss(y_hat, y)
 
         probs = torch.softmax(y_hat, dim=1)
@@ -212,3 +215,28 @@ class MultiLitModel(pl.LightningModule):
     def test_epoch_end(self, outputs) -> None:
         self.log('test_auroc', self.val_auroc.compute(), prog_bar=True)
         self.val_auroc.reset()
+
+
+class PredictLitModel(pl.LightningModule):
+
+    def __init__(self, config, preprocess_config_name):
+        super().__init__()
+
+        self.config = config
+        self.preprocess = Preprocessor(preprocess_config_name)
+        self.model = model(config.model_name,
+                           config.pretrained, config.num_classes)
+        self.show_shape = True
+        self.softmax = config.num_classes == 2
+
+        # log
+        _logger.info('The model is created')
+
+    def forward(self, x):
+        x = self.preprocess(x)
+        x = self.model(x)
+        if self.softmax:
+            x = torch.argmax(x, dim=1, keepdim=True)
+        else:
+            x = (torch.sigmoid(x) > .5)*1
+        return x[:,0]

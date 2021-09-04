@@ -1,4 +1,3 @@
-import argparse
 from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
@@ -33,7 +32,6 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
         callbacks=[lr_monitor], 
         logger=logger
         )
-
     # Fit and test
     trainer.fit(litmodel, dm)
     trainer.test(litmodel)
