@@ -1,4 +1,4 @@
 dataloader:
   num_workers: 2
-  batch_size: 512
+  batch_size: 64
   pin_memory: true
