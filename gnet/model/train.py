@@ -1,3 +1,4 @@
+from glob import glob
 from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
@@ -39,6 +40,9 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     # push to cloud
     wandb.finish(0)
 
+    # clean output folder, then save only the ckpt file
+    dirs = glob('*')
+    if not 'gnet' in dirs:      # to avoid executing this locally
+        os.system('rm * -rf')
     trainer.save_checkpoint("litmodel.ckpt")
-    # new_model = BinaryLitModel.load_from_checkpoint(checkpoint_path="litmodel.ckpt")
 
