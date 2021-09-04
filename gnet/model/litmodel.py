@@ -236,7 +236,7 @@ class PredictLitModel(pl.LightningModule):
         x = self.preprocess(x)
         x = self.model(x)
         if self.softmax:
-            x = torch.argmax(x, dim=1, keepdim=True)
+            x = torch.softmax(x, dim=1)[:, 1:]
         else:
-            x = (torch.sigmoid(x) > .5)*1
+            x = torch.sigmoid(x)
         return x[:,0]
