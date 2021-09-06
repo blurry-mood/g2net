@@ -138,8 +138,8 @@ class MultiLitModel(pl.LightningModule):
             self.loss = self.loss()
 
         # metric
-        self.train_auroc = AUROC(2, compute_on_step=True)
-        self.val_auroc = AUROC(2, compute_on_step=False)
+        self.train_auroc = AUROC(pos_label=1, compute_on_step=True)
+        self.val_auroc = AUROC(pos_label=1, compute_on_step=False)
 
         # log
         _logger.info('The model is created')
@@ -164,7 +164,7 @@ class MultiLitModel(pl.LightningModule):
         probs = torch.softmax(y_hat, dim=1)
 
         if len(y.unique()) != 1:
-            auc = self.train_auroc(probs, y)
+            auc = self.train_auroc(probs[:,1], y)
             self.log('train_auroc', auc, prog_bar=True)
 
         self.log('train_loss', loss, prog_bar=True)
@@ -186,7 +186,7 @@ class MultiLitModel(pl.LightningModule):
 
         probs = torch.softmax(y_hat, dim=1)
 
-        self.val_auroc(probs, y)
+        self.val_auroc(probs[:,1], y)
 
         self.log('val_loss', loss, prog_bar=True)
 
@@ -206,7 +206,7 @@ class MultiLitModel(pl.LightningModule):
 
         probs = torch.softmax(y_hat, dim=1)
 
-        self.val_auroc(probs, y)
+        self.val_auroc(probs[:,1], y)
 
         self.log('test_loss', loss, prog_bar=True, on_step=True)
 

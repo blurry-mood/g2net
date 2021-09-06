@@ -9,10 +9,12 @@ import os
 
 from .litmodel import BinaryLitModel, MultiLitModel
 from ..loader.datamodule import DataModule
+from ..utils import get_logger
 
 torch.backends.cudnn.benchmark = True
 
 _HERE = os.path.split(__file__)[0]
+_logger = get_logger()
 
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     cfg = os.path.join(_HERE, 'config', model_cfg_name+'.yaml')
@@ -43,6 +45,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     # clean output folder, then save only the ckpt file
     dirs = glob('*')
     if not 'gnet' in dirs:      # to avoid executing this locally
+        _logger.info('Cleaning output folder...')
         os.system('rm * -rf')
     trainer.save_checkpoint("litmodel.ckpt")
 
