@@ -5,4 +5,4 @@ dataloader:
   pin_memory: true
 split: 
   val: .05
-  test: .1
+  test: .3
