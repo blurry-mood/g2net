@@ -9,10 +9,10 @@ transform:
   center: true                  # kernel centered around the current sample
   pad_mode: constant            # reflect
   fmin: 20
-  fmax: 500
+  fmax: 1000
   sr: 2048                      # sampling rate
   output_format: Magnitude      # magnitude, complex, phase; for the last two it returns two channels
-  trainable: true    
+  trainable: false    
   verbose: false
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 1
