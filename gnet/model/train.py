@@ -17,8 +17,8 @@ _HERE = os.path.split(__file__)[0]
 _logger = get_logger()
 
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
-    cfg = os.path.join(_HERE, 'config', model_cfg_name+'.yaml')
-    cfg = OmegaConf.load(cfg)
+    cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)
+    cfg = OmegaConf.load(cfg[0])
 
     # model & datamodule
     litmodel = BinaryLitModel(cfg, pre_cfg_name) if cfg.num_classes==1 else MultiLitModel(cfg, pre_cfg_name)

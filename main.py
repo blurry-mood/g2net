@@ -1,4 +1,4 @@
 from gnet.model.train import train
 
 
-train('aucloss', 'stft win_len 64', 'small', 'data')
+train('celoss', 'stft win_len 1024', 'small', 'data')
