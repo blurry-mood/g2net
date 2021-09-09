@@ -135,7 +135,7 @@ class MultiLitModel(pl.LightningModule):
         if config.loss.args:
             self.loss = self.loss(**dict(config.loss.args))
         else:
-            self.loss = self.loss(reduction='none')
+            self.loss = self.loss()
 
         # metric
         self.train_auroc = AUROC(pos_label=1, compute_on_step=True)
@@ -160,7 +160,6 @@ class MultiLitModel(pl.LightningModule):
         y_hat = self(x)
 
         loss = self.loss(y_hat, y)
-        loss = loss.mean() + loss.max()
 
         probs = torch.softmax(y_hat, dim=1)
 
@@ -184,7 +183,6 @@ class MultiLitModel(pl.LightningModule):
                 f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
 
         loss = self.loss(y_hat, y)
-        loss = loss.mean() + loss.max()
 
         probs = torch.softmax(y_hat, dim=1)
 
@@ -205,7 +203,6 @@ class MultiLitModel(pl.LightningModule):
         x, y = batch
         y_hat = self(x)
         loss = self.loss(y_hat, y)
-        loss = loss.mean() + loss.max()
 
         probs = torch.softmax(y_hat, dim=1)
 
