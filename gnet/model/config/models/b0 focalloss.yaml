@@ -1,19 +1,19 @@
-model_name: efficientnet_b5
+model_name: efficientnet_b0
 pretrained: false
 num_classes: 2
 loss:
-  name: celoss
+  name: focalloss
   args:
 optimizer: 
   name: adamw
   args:
-    lr: 5e-3
+    lr: 1e-2
     weight_decay: 0
 scheduler:
-  name: cosine
+  name: step
   args:
-    num_warmup_steps: 3
-    num_training_steps: 16
+    step_size: 3
+    gamma: .1
 trainer:
   max_epochs: 8
   limit_train_batches: 2048
