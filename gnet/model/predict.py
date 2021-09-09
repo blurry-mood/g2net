@@ -1,3 +1,4 @@
+from glob import glob
 from omegaconf import OmegaConf
 import pandas
 import torch
@@ -16,8 +17,8 @@ _HERE = os.path.split(__file__)[0]
 @torch.no_grad()
 def predict(chkpt_path, model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     # configuration
-    cfg = os.path.join(_HERE, 'config', model_cfg_name+'.yaml')
-    cfg = OmegaConf.load(cfg)
+    cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)
+    cfg = OmegaConf.load(cfg[0])
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # model

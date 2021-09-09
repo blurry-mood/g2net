@@ -226,7 +226,6 @@ class PredictLitModel(pl.LightningModule):
         self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
                            config.pretrained, config.num_classes)
-        self.show_shape = True
         self.softmax = config.num_classes == 2
 
         # log
