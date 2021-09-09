@@ -2,7 +2,8 @@ from glob import glob
 from omegaconf import OmegaConf
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import WandbLogger
-from pytorch_lightning.callbacks import LearningRateMonitor
+from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
+
 import torch
 import wandb
 import os
@@ -27,17 +28,18 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     # wandb logger & lr monitor
     logger = WandbLogger(entity='blurry-mood', project='g2net')
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
+    checkpoint_callback = ModelCheckpoint(dirpath='.', filename='best', save_last=False, save_top_k=1, monitor="val_auroc", mode='max')
 
     # trainer
     trainer = Trainer(
         gpus=-1 if torch.cuda.is_available() else 0,
         **dict(cfg.trainer),
-        callbacks=[lr_monitor], 
+        callbacks=[lr_monitor, checkpoint_callback], 
         logger=logger
         )
     # Fit and test
     trainer.fit(litmodel, dm)
-    trainer.test(litmodel)
+    trainer.test(ckpt_path = checkpoint_callback.best_model_path)
     
     # push to cloud
     wandb.finish(0)
