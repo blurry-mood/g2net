@@ -1,5 +1,6 @@
 OmegaConf
 nnAudio
-timm
 transformers
 deepblocks
+
+git+git://github.com/rwightman/pytorch-image-models.git@master
