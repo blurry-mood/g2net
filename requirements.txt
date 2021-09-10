@@ -3,4 +3,4 @@ nnAudio
 transformers
 deepblocks
 
-git+git://github.com/rwightman/pytorch-image-models.git@master
+timm @ git+https://github.com/rwightman/pytorch-image-models.git@master
