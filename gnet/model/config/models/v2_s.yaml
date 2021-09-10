@@ -1,0 +1,22 @@
+model_name: efficientnetv2_s
+pretrained: false
+num_classes: 2
+loss:
+  name: celoss
+  args:
+optimizer: 
+  name: adamw
+  args:
+    lr: 1e-2
+    weight_decay: 0
+scheduler:
+  name: step
+  args:
+    step_size: 3
+    gamma: .1
+trainer:
+  max_epochs: 13
+  limit_train_batches: 2048
+  limit_val_batches: 512
+  # limit_test_batches: 2048
+  num_sanity_val_steps: 128  
