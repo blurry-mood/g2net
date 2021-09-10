@@ -12,8 +12,8 @@ optimizer:
 scheduler:
   name: step
   args:
-    step_size: 3
-    gamma: .1
+    step_size: 2
+    gamma: .2
 trainer:
   max_epochs: 8
   limit_train_batches: 2048
