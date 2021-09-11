@@ -44,8 +44,8 @@ class BinaryLitModel(pl.LightningModule):
         # metric
         self.train_auroc = AUROC(pos_label=1, compute_on_step=True)
         self.val_auroc = AUROC(pos_label=1, compute_on_step=False)
-        self.val_acc = Accuracy(num_classes=1, compute_on_step=True, top_k=1)
-        self.val_f1 = F1(compute_on_step=True, num_classes=1, top_k=1)
+        self.val_acc = Accuracy(num_classes=1, compute_on_step=True, )
+        self.val_f1 = F1(compute_on_step=True, num_classes=1, )
 
         # log
         _logger.info('The model is created')
@@ -95,7 +95,7 @@ class BinaryLitModel(pl.LightningModule):
 
         self.log('val_loss', loss, prog_bar=True)
         self.log('val_acc', self.val_acc(probs, y.unsqueeze(1)), prog_bar=True)
-        self.log('val_f1', self.val_f1(probs, y.unsqueeze(1)), loss, prog_bar=True)
+        self.log('val_f1', self.val_f1(probs, y.unsqueeze(1)), prog_bar=True)
         return loss
 
     def validation_epoch_end(self, outs):
@@ -114,7 +114,7 @@ class BinaryLitModel(pl.LightningModule):
         self.log('test_loss', loss, prog_bar=True, on_step=True)
 
         self.log('test_acc', self.val_acc(probs, y.unsqueeze(1)), prog_bar=True)
-        self.log('test_f1', self.val_f1(probs, y.unsqueeze(1)), loss, prog_bar=True)
+        self.log('test_f1', self.val_f1(probs, y.unsqueeze(1)), prog_bar=True)
         return loss
 
     def test_epoch_end(self, outputs) -> None:
@@ -145,8 +145,8 @@ class MultiLitModel(pl.LightningModule):
         # metric
         self.train_auroc = AUROC(pos_label=1, compute_on_step=True)
         self.val_auroc = AUROC(pos_label=1, compute_on_step=False)
-        self.val_acc = Accuracy(num_classes=1, compute_on_step=True, top_k=1)
-        self.val_f1 = F1(compute_on_step=True, num_classes=1, top_k=1)
+        self.val_acc = Accuracy(num_classes=1, compute_on_step=True, )
+        self.val_f1 = F1(compute_on_step=True, num_classes=1,)
 
         # log
         _logger.info('The model is created')
@@ -197,7 +197,7 @@ class MultiLitModel(pl.LightningModule):
 
         self.log('val_loss', loss, prog_bar=True)
         self.log('val_acc', self.val_acc(probs[:,1], y), prog_bar=True)
-        self.log('val_f1', self.val_f1(probs[:,1], y), loss, prog_bar=True)
+        self.log('val_f1', self.val_f1(probs[:,1], y), prog_bar=True)
 
         return loss
 
@@ -219,7 +219,7 @@ class MultiLitModel(pl.LightningModule):
 
         self.log('test_loss', loss, prog_bar=True, on_step=True)
         self.log('test_acc', self.val_acc(probs[:,1], y), prog_bar=True)
-        self.log('test_f1', self.val_f1(probs[:,1], y), loss, prog_bar=True)
+        self.log('test_f1', self.val_f1(probs[:,1], y), prog_bar=True)
 
         return loss
 
