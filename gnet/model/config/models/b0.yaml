@@ -1,8 +1,8 @@
 model_name: efficientnet_b0
 pretrained: false
-num_classes: 2
+num_classes: 1
 loss:
-  name: celoss
+  name: aucloss
   args:
 optimizer: 
   name: adamw
@@ -12,11 +12,11 @@ optimizer:
 scheduler:
   name: step
   args:
-    step_size: 3
+    step_size: 2
     gamma: .1
 trainer:
   max_epochs: 13
-  limit_train_batches: 2048
+  limit_train_batches: 1024
   limit_val_batches: 512
   # limit_test_batches: 2048
   num_sanity_val_steps: 128  

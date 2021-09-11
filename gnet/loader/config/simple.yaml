@@ -1,8 +1,8 @@
 dataloader:
   num_workers: 2
-  batch_size: 32
+  batch_size: 64
   shuffle: true
   pin_memory: true
 split: 
-  val: .05
+  val: .1
   test: .3
