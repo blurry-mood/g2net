@@ -1,6 +1,6 @@
 dataloader:
   num_workers: 2
-  batch_size: 64
+  batch_size: 32
   shuffle: true
   pin_memory: true
 split: 
