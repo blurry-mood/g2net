@@ -15,6 +15,6 @@ transform:
   verbose: false
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 1
-  - 1e-23
+  - 1e-18
 
 stacking: -1                     # stack signals from the three detectors along this axis: horizontally/vertically
