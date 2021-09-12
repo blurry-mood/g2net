@@ -8,8 +8,8 @@ transform:
   freq_scale: linear               # linear, log, no; relies on the fmin, fmax values
   center: true                  # kernel centered around the current sample
   pad_mode: constant            # reflect
-  fmin: 0
-  fmax: 50
+  fmin: 20
+  fmax: 500
   sr: 2048                      # sampling rate
   output_format: Phase          # magnitude, complex, phase; for the last two it returns two channels
   trainable: false    
