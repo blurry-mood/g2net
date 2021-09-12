@@ -1,7 +1,6 @@
 transform: 
   name: stft                    # melspectrogram, cqt, dft, 
-  n_fft: 4096                   # size of fft
-  win_length: 1024               # should be less than n_fft
+  n_fft: 1024                   # size of fft
   window: hann
   freq_bins: 256                # by default: n_fft//2+1
   hop_length: 16                # stride
@@ -11,7 +10,7 @@ transform:
   fmin: 0
   fmax: 50
   sr: 2048                      # sampling rate
-  output_format: Magnitude      # magnitude, complex, phase; for the last two it returns two channels
+  output_format: Phase          # magnitude, complex, phase; for the last two it returns two channels
   trainable: false    
   verbose: false
 scaling:                        # rescale the values to, e.g, [-1, 1]
