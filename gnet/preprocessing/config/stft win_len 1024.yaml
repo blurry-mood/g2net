@@ -14,7 +14,7 @@ transform:
   trainable: false    
   verbose: false
 scaling:                        # rescale the values to, e.g, [-1, 1]
-  - 1
-  - 1e-18
+  - 0
+  - 1.
 
 stacking: -1                     # stack signals from the three detectors along this axis: horizontally/vertically
