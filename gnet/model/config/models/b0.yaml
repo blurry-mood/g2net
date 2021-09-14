@@ -1,8 +1,8 @@
 model_name: efficientnet_b0
 pretrained: false
-num_classes: 2
+num_classes: 1
 loss:
-  name: celoss
+  name: bceloss
   args:
 optimizer: 
   name: adamw
@@ -20,3 +20,4 @@ trainer:
   limit_val_batches: 512
   # limit_test_batches: 2048
   num_sanity_val_steps: 128  
+  gradient_clip_val: 2.

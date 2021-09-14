@@ -15,10 +15,14 @@ from torch.optim.lr_scheduler import StepLR
 _logger = get_logger()
 
 _LOSS = {'celoss': nn.CrossEntropyLoss,
-         'focalloss': FocalLoss, 'bceloss': nn.BCEWithLogitsLoss, 'aucloss': AUCLoss}
+         'focalloss': FocalLoss, 'bceloss': nn.BCELoss, 'aucloss': AUCLoss}
 _OPT = {'adamw': AdamW, 'adam': Adam, 'sgd': SGD}
 _SCHEDULER = {'linear': get_linear_schedule_with_warmup,
               'step': StepLR, 'cosine': get_cosine_schedule_with_warmup}
+
+
+def psig(x:torch.Tensor, eps:float=.1):
+    return x/(x.abs() + eps)*0.5 + 0.5
 
 
 class BinaryLitModel(pl.LightningModule):
@@ -65,24 +69,26 @@ class BinaryLitModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
+        y_hat = psig(y_hat)
 
         loss = self.loss(y_hat, y.unsqueeze(1).float())
 
-        probs = torch.sigmoid(y_hat)
+        probs = y_hat
 
         if len(y.unique()) != 1:
             auc = self.train_auroc(probs, y.unsqueeze(1))
             self.log('train_auroc', auc, prog_bar=True)
 
         self.log('train_loss', loss, prog_bar=True)
-        lmd = (self.trainer.current_epoch/self.max_epochs)**2
-        loss = loss - lmd*y_hat.abs().mean()
+        # lmd = (self.trainer.current_epoch/self.max_epochs)**2
+        # loss = loss - lmd*y_hat.abs().mean()
 
         return loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
+
         if self.show_shape:
             self.show_shape = False
             _logger.info(
@@ -90,9 +96,12 @@ class BinaryLitModel(pl.LightningModule):
             xx = self.preprocess(x)
             _logger.info(
                 f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
+        
+        y_hat = psig(y_hat)
+
         loss = self.loss(y_hat, y.unsqueeze(1).float())
 
-        probs = torch.sigmoid(y_hat)
+        probs = y_hat
 
         self.val_auroc(probs, y.unsqueeze(1))
 
@@ -108,9 +117,12 @@ class BinaryLitModel(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
+        
+        y_hat = psig(y_hat)
+
         loss = self.loss(y_hat, y.unsqueeze(1).float())
 
-        probs = torch.sigmoid(y_hat)
+        probs = y_hat
 
         self.val_auroc(probs, y.unsqueeze(1))
 
