@@ -29,6 +29,7 @@ class BinaryLitModel(pl.LightningModule):
         self.save_hyperparameters()
 
         self.config = config
+        self.max_epochs = config.trainer.max_epochs*2
         self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
                            config.pretrained, 1)
@@ -74,6 +75,9 @@ class BinaryLitModel(pl.LightningModule):
             self.log('train_auroc', auc, prog_bar=True)
 
         self.log('train_loss', loss, prog_bar=True)
+        lmd = (self.trainer.current_epoch/self.max_epochs)**2
+        loss = loss - lmd*y_hat.abs().mean()
+        _logger.info(f'Current lambda is {lmd:.4f}')
 
         return loss
 
@@ -130,6 +134,7 @@ class MultiLitModel(pl.LightningModule):
         self.save_hyperparameters()
 
         self.config = config
+        self.max_epochs = config.trainer.max_epochs*2
         self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
                            config.pretrained, 2)
@@ -175,6 +180,10 @@ class MultiLitModel(pl.LightningModule):
             self.log('train_auroc', auc, prog_bar=True)
 
         self.log('train_loss', loss, prog_bar=True)
+
+        lmd = (self.trainer.current_epoch/self.max_epochs)**4
+        loss = loss - lmd*y_hat.abs().mean()
+        _logger.info(f'Current lambda is {lmd:.4f}')
 
         return loss
 
