@@ -77,7 +77,6 @@ class BinaryLitModel(pl.LightningModule):
         self.log('train_loss', loss, prog_bar=True)
         lmd = (self.trainer.current_epoch/self.max_epochs)**2
         loss = loss - lmd*y_hat.abs().mean()
-        _logger.info(f'Current lambda is {lmd:.4f}')
 
         return loss
 
@@ -183,7 +182,6 @@ class MultiLitModel(pl.LightningModule):
 
         lmd = (self.trainer.current_epoch/self.max_epochs)**4
         loss = loss - lmd*y_hat.abs().mean()
-        _logger.info(f'Current lambda is {lmd:.4f}')
 
         return loss
 
