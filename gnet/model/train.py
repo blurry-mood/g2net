@@ -8,7 +8,7 @@ import torch
 import wandb
 import os
 
-from .litmodel import LitModel
+from .litmodel import LitModel, DMLLitModel
 from ..loader.datamodule import DataModule
 from ..utils import get_logger
 
@@ -17,32 +17,31 @@ torch.backends.cudnn.benchmark = True
 _HERE = os.path.split(__file__)[0]
 _logger = get_logger()
 
+_LITMODELS = {'standard': LitModel, 'dml': DMLLitModel}
+
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)
     cfg = OmegaConf.load(cfg[0])
-
+    
     # model & datamodule
-    litmodel = LitModel(cfg, pre_cfg_name)
+    litmodel = _LITMODELS[cfg.type or 'standard'](cfg, pre_cfg_name)
     dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
     logger = WandbLogger(entity='blurry-mood', project='g2net')
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
-    checkpoint_callback = ModelCheckpoint(dirpath='.', filename='best', save_last=False, save_top_k=1, monitor="val_auroc", mode='max')
 
     # trainer
     trainer = Trainer(
         gpus=-1 if torch.cuda.is_available() else 0,
         **dict(cfg.trainer),
-        callbacks=[lr_monitor, checkpoint_callback], 
+        callbacks=[lr_monitor], 
         logger=logger
         )
+    
     # Fit and test
     trainer.fit(litmodel, dm)
-    trainer.test(ckpt_path = checkpoint_callback.best_model_path)
-    
-    # push to cloud
-    wandb.finish(0)
+    trainer.test(litmodel)
 
     # clean output folder, then save only the ckpt file
     dirs = glob('*')
@@ -51,3 +50,15 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
         os.system('rm * -rf')
     trainer.save_checkpoint("litmodel.ckpt")
 
+    # log artifacts
+    run = trainer.logger.experiment
+    artifact = wandb.Artifact('my-model', type='model')
+    artifact.add_file('litmodel.ckpt')
+    run.log_artifact(artifact)
+    
+    artifact = wandb.Artifact('my-code', type='dataset')
+    artifact.add_dir(os.path.join(_HERE, '..'))
+    run.log_artifact(artifact)
+    
+    # push to cloud
+    wandb.finish(0)
