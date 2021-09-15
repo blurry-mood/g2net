@@ -8,7 +8,7 @@ import torch
 import wandb
 import os
 
-from .litmodel import BinaryLitModel, MultiLitModel
+from .litmodel import LitModel
 from ..loader.datamodule import DataModule
 from ..utils import get_logger
 
@@ -22,7 +22,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     cfg = OmegaConf.load(cfg[0])
 
     # model & datamodule
-    litmodel = BinaryLitModel(cfg, pre_cfg_name) if cfg.num_classes==1 else MultiLitModel(cfg, pre_cfg_name)
+    litmodel = LitModel(cfg, pre_cfg_name)
     dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
