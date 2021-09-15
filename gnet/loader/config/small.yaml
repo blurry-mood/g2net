@@ -1,6 +1,6 @@
 dataloader:
   num_workers: 4
-  batch_size: 2
+  batch_size: 1
   shuffle: true
 split: 
   val: .3
