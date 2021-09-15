@@ -1,7 +1,6 @@
 transform: 
   name: stft                    # melspectrogram, cqt, dft, 
   n_fft: 1024                   # size of fft
-  win_length: 1024              # size of fft
   window: hann
   freq_bins: 256                # by default: n_fft//2+1
   hop_length: 16                # stride
@@ -17,5 +16,4 @@ transform:
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 1
   - 6e-21
-
-stacking: -1                     # stack signals from the three detectors along this axis: horizontally/vertically
+augment: true
