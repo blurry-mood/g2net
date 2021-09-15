@@ -2,10 +2,10 @@ from glob import glob
 import os
 from omegaconf import OmegaConf
 from torch import nn
+import torch
 
 from ..utils import get_logger
 from .spec_transform import SpecTransform
-from .concatenator import HStack, FFTStack
 
 _logger = get_logger()
 _HERE = os.path.split(__file__)[0]
@@ -25,14 +25,12 @@ class Preprocessor(nn.Module):
         config = OmegaConf.load(config[0])
 
         self.spec_transform = SpecTransform(config.transform, config.scaling)
-        if self.spec_transform.multi_win_lengths:
-            self.concatenator = FFTStack()
-        elif config.stacking>=0:
-            self.concatenator = HStack(config.stacking)
-        self.stack = self.spec_transform.multi_win_lengths or (config.stacking>=0)
+        self.augment = config.augment
+
 
     def forward(self, x):
         x = self.spec_transform(x)
-        if self.stack:
-            x = self.concatenator(x)
+        if self.augment:
+            perm = torch.randperm(3, device=x.device)
+            x = x[:, perm]
         return x
