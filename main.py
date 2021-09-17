@@ -1,4 +1,4 @@
 from gnet.model.train import train
 
 
-train('b0', 'stft', 'small', 'data')
+train('dml', 'stft fmin 20', 'small', 'data')

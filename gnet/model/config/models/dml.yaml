@@ -1,7 +1,7 @@
 type: dml
 model_name: efficientnet_b0
 pretrained1: false
-pretrained2: true
+pretrained2: false
 num_intermediate: 100
 num_classes: 2
 loss:

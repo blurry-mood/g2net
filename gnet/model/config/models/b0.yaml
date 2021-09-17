@@ -1,3 +1,4 @@
+type: standard
 model_name: efficientnet_b0
 pretrained: false
 num_classes: 1

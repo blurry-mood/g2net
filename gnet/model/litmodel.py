@@ -263,6 +263,15 @@ class DMLLitModel(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
+
+        if self.show_shape:
+            self.show_shape = False
+            _logger.info(
+                f'Raw input shape: {x.shape}, mean: {x.mean()}, std: {x.std()}')
+            xx = self.preprocess(x)
+            _logger.info(
+                f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
+
         (x1, y1), (x2, y2) = self(x)
 
         if not self.multi_cls:
