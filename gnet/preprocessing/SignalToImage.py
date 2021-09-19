@@ -14,6 +14,7 @@ class SignalToImage(nn.Module):
 
         mods = []
         for i in range(n):
+            cfg[i].stride = tuple(cfg[i].stride)
             mods.append(nn.Conv2d(**dict(cfg[i])))
             mods.append(nn.SiLU())
 
