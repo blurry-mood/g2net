@@ -234,7 +234,7 @@ class DMLLitModel(pl.LightningModule):
         if not self.multi_cls:
             y1 = y1.unsqueeze(1)
 
-        loss = self.loss(y1, y if self.multi_cls else y.float()) + kl_div(x2, x1)
+        loss = self.loss(y1, y if self.multi_cls else y.float()) + 0.5*kl_div(x2, x1)
         opt.zero_grad()
         self.manual_backward(loss)
         opt.step()
@@ -248,7 +248,7 @@ class DMLLitModel(pl.LightningModule):
         if not self.multi_cls:
             y2 = y2.unsqueeze(1)
 
-        loss = self.loss(y2, y if self.multi_cls else y.float()) + kl_div(x1, x2)
+        loss = self.loss(y2, y if self.multi_cls else y.float()) + 0.5*kl_div(x1, x2)
         opt.zero_grad()
         self.manual_backward(loss)
         opt.step()
