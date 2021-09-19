@@ -15,9 +15,11 @@ class SignalToImage(nn.Module):
         mods = []
         for i in range(n):
             config = dict(cfg[i])
-            config['stride'] = tuple(config['stride'])
+            # config['stride'] = tuple(config['stride'])
             mods.append(nn.Conv2d(**config))
-            mods.append(nn.SiLU())
+            mods.append(nn.MaxPool2d(kernel_size=5, stride=(1, 2), padding=2))
+            mods.append(nn.BatchNorm2d(config['out_channels']))
+            mods.append(nn.ELU())
 
         self.model = nn.Sequential(*mods)
 
