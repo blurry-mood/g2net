@@ -10,6 +10,7 @@ transform:
   window: hann
   pad_mode: constant
   output_format: Magnitude
+  verbose: false
 
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 3
