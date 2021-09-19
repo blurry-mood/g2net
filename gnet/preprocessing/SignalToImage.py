@@ -1,8 +1,6 @@
 from torch import nn
 import torch
-from ..utils import get_logger
 
-_logger = get_logger()
 
 class SignalToImage(nn.Module):
     def __init__(self, cfg):
@@ -27,5 +25,5 @@ class SignalToImage(nn.Module):
         x = x / self.std - self.mean
         x.unsqueeze_(1)
         x = self.model(x)
-        x = torch.permute(x, dims=(0, 2, 1, 3))
+        x = x.permute(0, 2, 1, 3)
         return x
