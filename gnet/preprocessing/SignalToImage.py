@@ -1,6 +1,8 @@
 from torch import nn
 import torch
+from ..utils import get_logger
 
+_logger = get_logger()
 
 class SignalToImage(nn.Module):
     def __init__(self, cfg):
@@ -14,8 +16,9 @@ class SignalToImage(nn.Module):
 
         mods = []
         for i in range(n):
-            cfg[i].stride = tuple(cfg[i].stride)
-            mods.append(nn.Conv2d(**dict(cfg[i])))
+            config = dict(cfg[i])
+            config['stride'] = tuple(config['stride'])
+            mods.append(nn.Conv2d(**config))
             mods.append(nn.SiLU())
 
         self.model = nn.Sequential(*mods)
