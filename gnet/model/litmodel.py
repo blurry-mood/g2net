@@ -81,7 +81,6 @@ class LitModel(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
-        y_hat = self(x)
 
         if self.show_shape:
             self.show_shape = False
@@ -91,6 +90,9 @@ class LitModel(pl.LightningModule):
             _logger.info(
                 f'Preprocessed input shape: {xx.shape}, mean: {xx.mean()}, std: {xx.std()}')
         
+        y_hat = self(x)
+
+
         if not self.multi_cls:
             y = y.unsqueeze(1)
 
