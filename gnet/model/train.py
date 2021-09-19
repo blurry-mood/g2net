@@ -39,9 +39,8 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
         logger=logger
         )
     
-    # Fit and test
+    # Fit
     trainer.fit(litmodel, dm)
-    trainer.test(litmodel)
 
     # clean output folder, then save only the ckpt file
     dirs = glob('*')
@@ -60,5 +59,8 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     artifact.add_dir(os.path.join(_HERE, '..'))
     run.log_artifact(artifact)
     
+    # Test
+    trainer.test(litmodel)
+
     # push to cloud
     wandb.finish(0)

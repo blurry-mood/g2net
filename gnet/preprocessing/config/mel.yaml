@@ -1,19 +1,18 @@
 transform: 
-  name: cqt                    # melspectrogram, cqt, stft, 
+  name: mel                    # melspectrogram, cqt, stft, 
   sr: 2048
+  n_mels: 256
   hop_length: 16
   fmin: 20
-  n_bins: 256
-  bins_per_octave: 60
-  norm: true
-  basis_norm: 1
+  fmax: 500
   window: hann
+  center: true
   pad_mode: constant
-  output_format: Magnitude
+  htk: true
   verbose: false
 
 scaling:                        # rescale the values to, e.g, [-1, 1]
-  - 1
-  - 5e-22
+  - 0.3
+  - 1e-41
 
 augment: false
