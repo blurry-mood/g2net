@@ -1,8 +1,8 @@
 from typing import List
-from nnAudio.Spectrogram import STFT, MelSpectrogram
+from nnAudio.Spectrogram import STFT, MelSpectrogram, CQT2010v2
 import torch
 
-_TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram}
+_TRANSFORMS = {'stft': STFT, 'mel': MelSpectrogram, 'cqt': CQT2010v2}
 
 
 def _get_nnaudio_transform(config):

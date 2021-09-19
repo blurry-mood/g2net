@@ -7,13 +7,13 @@ transform:
   freq_scale: log               # linear, log, no; relies on the fmin, fmax values
   center: true                  # kernel centered around the current sample
   pad_mode: constant            # reflect
-  fmin: 1e-10
-  fmax: 1e3
+  fmin: 20
+  fmax: 500
   sr: 2048                      # sampling rate
   output_format: Magnitude          # magnitude, complex, phase; for the last two it returns two channels
   trainable: false    
   verbose: false
 scaling:                        # rescale the values to, e.g, [-1, 1]
   - 1
-  - 9e-19
-augment: true
+  - 6e-21
+augment: false

@@ -1,21 +1,21 @@
 type: standard
 model_name: efficientnet_b0
 pretrained: false
-num_classes: 1
+num_classes: 2
 loss:
-  name: bceloss
+  name: celoss
   args:
 optimizer: 
   name: adamw
   args:
     lr: 1e-2
-    weight_decay: 0
+    weight_decay: 1e-4
 scheduler:
   name: step
   args:
-    step_size: 3
+    step_size: 2
     gamma: .1
 trainer:
-  max_epochs: 8
+  max_epochs: 6
   num_sanity_val_steps: 128  
   gradient_clip_val: 2.
