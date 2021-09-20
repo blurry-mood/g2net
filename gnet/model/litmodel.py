@@ -139,7 +139,8 @@ class LitModel(pl.LightningModule):
 
 
 class PaperLitModel(pl.LightningModule):
-
+    """ Implementation of this: https://arxiv.org/pdf/2105.03073v3.pdf
+    """
     def __init__(self, config, preprocess_config_name):
         super().__init__()
 
