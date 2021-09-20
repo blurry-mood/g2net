@@ -1,3 +1,4 @@
+type: standard
 model_name: efficientnetv2_rw_s
 pretrained: false
 num_classes: 2
