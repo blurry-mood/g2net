@@ -8,23 +8,26 @@ import torch
 import wandb
 import os
 
-from .litmodel import LitModel, DMLLitModel
+from .litmodel import LitModel, DMLLitModel, PaperLitModel
 from ..loader.datamodule import DataModule
 from ..utils import get_logger
+
+
+os.environ["WANDB_START_METHOD"] = "thread"
 
 torch.backends.cudnn.benchmark = True
 
 _HERE = os.path.split(__file__)[0]
 _logger = get_logger()
 
-_LITMODELS = {'standard': LitModel, 'dml': DMLLitModel}
+_LITMODELS = {'standard': LitModel, 'dml': DMLLitModel, 'paper':PaperLitModel}
 
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)
     cfg = OmegaConf.load(cfg[0])
     
     # model & datamodule
-    litmodel = _LITMODELS[cfg.type or 'standard'](cfg, pre_cfg_name)
+    litmodel = _LITMODELS[cfg.type](cfg, pre_cfg_name)
     dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
