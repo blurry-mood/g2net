@@ -1,0 +1,3 @@
+scaling:
+  mean: 1e-23
+  std: 1e-21

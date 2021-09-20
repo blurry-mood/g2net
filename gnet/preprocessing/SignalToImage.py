@@ -24,7 +24,7 @@ class SignalToImage(nn.Module):
         self.model = nn.Sequential(*mods)
 
     def forward(self, x):
-        x = x / self.std - self.mean
+        x = (x  - self.mean)/self.std
         x.unsqueeze_(1)
         x = self.model(x)
         x = x.permute(0, 2, 1, 3)

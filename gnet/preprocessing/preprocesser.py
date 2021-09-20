@@ -1,4 +1,5 @@
 from glob import glob
+from gnet.preprocessing.scale import Scale
 import os
 from omegaconf import OmegaConf
 from torch import nn
@@ -25,8 +26,12 @@ class Preprocessor(nn.Module):
         config = OmegaConf.load(config[0])
 
         # SignalToImage triggered if `convnet` key is present in `config`
-        self.transform = SpecTransform(config.transform, config.scaling) if not 'convnet' in dict(config) else SignalToImage(config)
-
+        if 'convnet' in dict(config):
+            self.transform = SignalToImage(config)
+        elif 'transform' in dict(config):
+            self.transform = SpecTransform(config.transform, config.scaling)
+        elif 'scaling' in dict(config):
+            self.transform = Scale(config)
 
     def forward(self, x):
         x = self.transform(x)
