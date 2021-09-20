@@ -4,5 +4,5 @@ dataloader:
   shuffle: true
   pin_memory: true
 split: 
-  val: .1
-  test: .3
+  val: .19
+  test: .8

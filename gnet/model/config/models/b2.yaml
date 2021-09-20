@@ -16,7 +16,6 @@ scheduler:
     gamma: .1
 trainer:
   max_epochs: 13
-  limit_train_batches: 2048
   limit_val_batches: 512
-  # limit_test_batches: 2048
+  limit_test_batches: 2048
   num_sanity_val_steps: 128  
