@@ -13,7 +13,7 @@ scheduler:
   args:
     num_warmup_steps: 3
 trainer:
-  max_epochs: 8
+  max_epochs: 15
   num_sanity_val_steps: 128  
   limit_val_batches: 512
   limit_test_batches: 2048
