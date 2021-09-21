@@ -12,8 +12,5 @@ transform:
   output_format: Magnitude
   verbose: false
 
-scaling:                        # rescale the values to, e.g, [-1, 1]
-  - 1
-  - 5e-22
-
-augment: false
+pca: 1
+scale: true

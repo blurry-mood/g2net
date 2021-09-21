@@ -13,7 +13,6 @@ transform:
   output_format: Magnitude          # magnitude, complex, phase; for the last two it returns two channels
   trainable: false    
   verbose: false
-scaling:                        # rescale the values to, e.g, [-1, 1]
-  - 1
-  - 6e-21
-augment: false
+
+pca: 1
+scale: true

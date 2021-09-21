@@ -6,7 +6,7 @@ from torch import nn
 
 from ..utils import get_logger
 from .spec_transform import SpecTransform
-from .SignalToImage import SignalToImage
+from .pca import PCA
 
 _logger = get_logger()
 _HERE = os.path.split(__file__)[0]
@@ -25,14 +25,14 @@ class Preprocessor(nn.Module):
             raise ValueError()
         config = OmegaConf.load(config[0])
 
-        # SignalToImage triggered if `convnet` key is present in `config`
-        if 'convnet' in dict(config):
-            self.transform = SignalToImage(config)
-        elif 'transform' in dict(config):
-            self.transform = SpecTransform(config.transform, config.scaling)
-        elif 'scaling' in dict(config):
-            self.transform = Scale(config)
+        self.spectrogram = SpecTransform(config.transform)
+        self.scale = Scale() if config.scale else None
+        self.pca = PCA() if config.pca>0 else None
 
     def forward(self, x):
-        x = self.transform(x)
+        if self.scale:
+            x = self.scale(x)
+        if self.pca:
+            x = self.pca(x)
+        x = self.spectrogram(x)
         return x

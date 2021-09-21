@@ -147,7 +147,7 @@ class PaperLitModel(pl.LightningModule):
         self.save_hyperparameters()
 
         self.preprocess = Preprocessor(preprocess_config_name)
-        self.model = Paper(config.num_classes)
+        self.model = Paper(config.in_channels, config.num_classes)
         
         self.multi_cls = config.num_classes>1
         self.show_shape = True
