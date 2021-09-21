@@ -45,6 +45,9 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     # Fit
     trainer.fit(litmodel, dm)
 
+    # Test
+    trainer.test(litmodel)
+    
     # clean output folder, then save only the ckpt file
     dirs = glob('*')
     if not 'gnet' in dirs:      # to avoid executing this locally
@@ -62,8 +65,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     artifact.add_dir(os.path.join(_HERE, '..'))
     run.log_artifact(artifact)
     
-    # Test
-    trainer.test(litmodel)
+
 
     # push to cloud
     wandb.finish(0)
