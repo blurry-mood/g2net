@@ -9,7 +9,7 @@ optimizer:
     lr: 1e-2
     weight_decay: 0
 scheduler:
-  name: step
+  name: linear
   args:
     step_size: 3
     gamma: .1
