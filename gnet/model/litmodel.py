@@ -10,7 +10,7 @@ from torch.nn.functional import softmax,  log_softmax
 
 from deepblocks.loss import FocalLoss, AUCLoss
 from torchmetrics import AUROC, Accuracy, F1
-from transformers import AdamW, get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup
+from transformers import AdamW, get_linear_schedule_with_warmup, get_cosine_schedule_with_warmup, get_constant_schedule_with_warmup
 from torch.optim import Adam, SGD
 from torch.optim.lr_scheduler import StepLR
 
@@ -19,7 +19,7 @@ _logger = get_logger()
 _LOSS = {'celoss': nn.CrossEntropyLoss,
          'focalloss': FocalLoss, 'bceloss': nn.BCEWithLogitsLoss, 'aucloss': AUCLoss}
 _OPT = {'adamw': AdamW, 'adam': Adam, 'sgd': SGD}
-_SCHEDULER = {'linear': get_linear_schedule_with_warmup,
+_SCHEDULER = {'linear': get_linear_schedule_with_warmup, 'constant':get_constant_schedule_with_warmup,
               'step': StepLR, 'cosine': get_cosine_schedule_with_warmup}
 
 class LitModel(pl.LightningModule):
