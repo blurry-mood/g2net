@@ -1,9 +1,9 @@
 type: standard
 model_name: efficientnet_b0
 pretrained: false
-num_classes: 2
+num_classes: 1
 loss:
-  name: celoss
+  name: bceloss
   args:
 optimizer: 
   name: adamw
@@ -11,12 +11,11 @@ optimizer:
     lr: 1e-2
     weight_decay: 0
 scheduler:
-  name: step
+  name: constant
   args:
-    step_size: 3
-    gamma: .1
+    num_warmup_steps: 3
 trainer:
-  max_epochs: 8
+  max_epochs: 15
   num_sanity_val_steps: 128  
   limit_val_batches: 512
   limit_test_batches: 2048
