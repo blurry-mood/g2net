@@ -8,7 +8,7 @@ import torch
 import wandb
 import os
 
-from .litmodel import LitModel, DMLLitModel, PaperLitModel
+from .litmodel import LitModel, PaperLitModel
 from ..loader.datamodule import DataModule
 from ..utils import get_logger
 
@@ -20,7 +20,7 @@ torch.backends.cudnn.benchmark = True
 _HERE = os.path.split(__file__)[0]
 _logger = get_logger()
 
-_LITMODELS = {'standard': LitModel, 'dml': DMLLitModel, 'paper':PaperLitModel}
+_LITMODELS = {'standard': LitModel, 'paper':PaperLitModel}
 
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)

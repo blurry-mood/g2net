@@ -6,7 +6,6 @@ from torch import nn
 
 from ..utils import get_logger
 from .spec_transform import SpecTransform
-from .pca import PCA
 
 _logger = get_logger()
 _HERE = os.path.split(__file__)[0]
