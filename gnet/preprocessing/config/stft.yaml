@@ -14,5 +14,5 @@ transform:
   trainable: false    
   verbose: false
 
-pca: 1
+pca: 0
 scale: true

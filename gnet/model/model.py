@@ -11,10 +11,10 @@ class Paper(nn.Module):
         super().__init__()
 
         self.encoder = nn.Sequential(
-            nn.Conv1d(in_channels, 32, 1),
+            nn.Conv1d(in_channels, 32, kernel_size=5, stride=1, padding=2),
             nn.Tanh(),
             nn.MaxPool1d(4),
-            nn.Conv1d(32, 16, 1),
+            nn.Conv1d(32, 16, kernel_size=5, stride=1, padding=2),
             nn.Tanh()
         )
 
