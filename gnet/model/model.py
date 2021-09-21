@@ -7,11 +7,11 @@ def model(model_name, pretrained, num_classes):
 
 
 class Paper(nn.Module):
-    def __init__(self, in_channels, num_classes):
+    def __init__(self, num_classes):
         super().__init__()
 
         self.encoder = nn.Sequential(
-            nn.Conv1d(in_channels, 32, kernel_size=5, stride=1, padding=2),
+            nn.Conv1d(3, 32, kernel_size=5, stride=1, padding=2),
             nn.Tanh(),
             nn.MaxPool1d(4),
             nn.Conv1d(32, 16, kernel_size=5, stride=1, padding=2),
@@ -25,7 +25,7 @@ class Paper(nn.Module):
 
     def forward(self, x:torch.Tensor):
         b = x.size(0)
-        # x.shape = (batch, in_channels, 256, 257)
+        # x.shape = (batch, 3, 256, 257)
         x = x.permute(0, 2, 1, 3).flatten(0, 1)
         # x.shape = (batch * 256, 3, 257)
         
