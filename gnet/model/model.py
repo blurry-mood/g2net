@@ -13,26 +13,26 @@ class Paper(nn.Module):
         self.encoder = nn.Sequential(
             nn.Conv1d(3, 32, 1),
             nn.Tanh(),
-            nn.MaxPool1d(2),
+            nn.MaxPool1d(4),
             nn.Conv1d(32, 16, 1),
             nn.Tanh()
         )
 
-        self.decoder = nn.LSTM(input_size=64, hidden_size=100, num_layers=3, batch_first=True, bidirectional=True, dropout=0.)
+        self.decoder = nn.LSTM(input_size=1024, hidden_size=100, num_layers=3, batch_first=True, bidirectional=True, dropout=0.)
 
         self.dense = nn.Linear(100, 1)
-        self.dense2 = nn.Linear(512, num_classes)
+        self.dense2 = nn.Linear(256, num_classes)
 
     def forward(self, x:torch.Tensor):
         b = x.size(0)
-        # x.shape = (batch, 3, 4096)
-        x = x.unflatten(-1, (8, 512)).permute(0, 3, 1, 2).flatten(0, 1)
-        # x.shape = (batch * 512, 3, 8)
+        # x.shape = (batch, 3, 256, 257)
+        x = x.permute(0, 2, 1, 3).flatten(0, 1)
+        # x.shape = (batch * 256, 3, 257)
         
-        x = self.encoder(x)   # shape=(batch * 512, 16, 4)
-        x = x.flatten(-2, -1).unflatten(0, (b, 512))   # shape = (batch, 512, 64)
-        x, *_ = self.decoder(x) # x.shape = (batch, 512, 2*100)
-        x = x.view(-1, 512, 2, 100)[:,:,0]  # x.shape = (batch, 512, 100)
-        x = self.dense(x).squeeze(-1)   # x.shape = (batch, 512)
+        x = self.encoder(x)   # shape=(batch * 256, 16, 64)
+        x = x.flatten(-2, -1).unflatten(0, (b, 256))   # shape = (batch, 256, 1024)
+        x, *_ = self.decoder(x) # x.shape = (batch, 256, 2*100)
+        x = x.view(-1, 256, 2, 100)[:,:,0]  # x.shape = (batch, 256, 100)
+        x = self.dense(x).squeeze(-1)   # x.shape = (batch, 256)
         x = self.dense2(x)  # x.shape = (batch, num_classes)
         return x
