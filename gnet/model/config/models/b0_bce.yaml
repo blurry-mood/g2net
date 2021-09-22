@@ -10,9 +10,10 @@ optimizer:
     lr: 1e-2
     weight_decay: 0
 scheduler:
-  name: constant
+  name: linear
   args:
     num_warmup_steps: 3
+    num_training_steps: 15
 trainer:
   max_epochs: 8
   num_sanity_val_steps: 128  
