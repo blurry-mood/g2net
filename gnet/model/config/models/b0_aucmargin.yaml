@@ -1,21 +1,23 @@
-model_name: efficientnet_b5
+model_name: efficientnet_b0
 pretrained: false
-num_classes: 2
+num_classes: 1
 loss:
-  name: celoss
+  name: aucmarginloss
   args:
+    m: 0.9
+    p: 0.5
 optimizer: 
   name: adamw
   args:
     lr: 1e-2
     weight_decay: 0
 scheduler:
-  name: step
+  name: linear
   args:
-    step_size: 3
-    gamma: .1
+    num_warmup_steps: 3
+    num_training_steps: 15
 trainer:
   max_epochs: 8
+  num_sanity_val_steps: 128  
   limit_val_batches: 512
   limit_test_batches: 2048
-  num_sanity_val_steps: 128  

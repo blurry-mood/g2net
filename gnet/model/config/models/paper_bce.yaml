@@ -1,6 +1,6 @@
-type: paper
+model_name: paper
+pretrained: false
 num_classes: 1
-in_channels: 3
 loss:
   name: bceloss
   args:
@@ -10,11 +10,12 @@ optimizer:
     lr: 1e-2
     weight_decay: 0
 scheduler:
-  name: constant
+  name: linear
   args:
     num_warmup_steps: 3
+    num_training_steps: 15
 trainer:
-  max_epochs: 15
+  max_epochs: 8
   num_sanity_val_steps: 128  
   limit_val_batches: 512
   limit_test_batches: 2048
