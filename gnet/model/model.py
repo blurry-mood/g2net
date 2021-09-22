@@ -3,18 +3,22 @@ import timm
 import torch
 
 def model(model_name, pretrained, num_classes):
+    if model_name=='paper':
+        return Paper(num_classes=num_classes)
     return timm.create_model(model_name, pretrained, num_classes=num_classes,  )
 
 
 class Paper(nn.Module):
+    """ Implementation of this: https://arxiv.org/pdf/2105.03073v3.pdf
+    """
     def __init__(self, num_classes):
         super().__init__()
 
         self.encoder = nn.Sequential(
-            nn.Conv1d(3, 32, kernel_size=5, stride=1, padding=2),
+            nn.Conv1d(3, 32, kernel_size=1, stride=1, padding=0),
             nn.Tanh(),
             nn.MaxPool1d(4),
-            nn.Conv1d(32, 16, kernel_size=5, stride=1, padding=2),
+            nn.Conv1d(32, 16, kernel_size=1, stride=1, padding=0),
             nn.Tanh()
         )
 
