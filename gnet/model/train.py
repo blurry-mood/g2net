@@ -60,7 +60,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     artifact.add_file('litmodel.ckpt')
     run.log_artifact(artifact)
     
-    artifact = wandb.Artifact('my-code', type='code')
+    artifact = wandb.Artifact('my-code', type='dataset')
     artifact.add_dir(os.path.join(_HERE, '..'))
     run.log_artifact(artifact)
 
