@@ -20,6 +20,8 @@ _logger = get_logger()
 
 
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
+    wandb.init()
+
     cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)
     cfg = OmegaConf.load(cfg[0])
     
@@ -50,10 +52,6 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
         os.system('rm * -rf')
     trainer.save_checkpoint("litmodel.ckpt")
 
-    # wandb.finish(0)
-
-    # run = wandb.init(job_type="dataset-creation",  reinit=True)
-
     # log artifacts
     run = trainer.logger.experiment
     artifact = wandb.Artifact('my-model', type='model')
@@ -64,4 +62,4 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     artifact.add_dir(os.path.join(_HERE, '..'))
     run.log_artifact(artifact)
 
-    # wandb.finish(0)
+    wandb.finish(0)
