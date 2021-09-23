@@ -1,8 +1,8 @@
 model_name: efficientnet_b0
 pretrained: false
-num_classes: 1
+num_classes: 2
 loss:
-  name: bceloss
+  name: celoss
   args:
 optimizer: 
   name: adamw

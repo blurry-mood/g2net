@@ -26,12 +26,9 @@ class Preprocessor(nn.Module):
 
         self.spectrogram = SpecTransform(config.transform)
         self.scale = Scale() if config.scale else None
-        self.pca = PCA() if config.pca>0 else None
 
     def forward(self, x):
         if self.scale:
             x = self.scale(x)
-        if self.pca:
-            x = self.pca(x)
         x = self.spectrogram(x)
         return x
