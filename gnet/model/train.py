@@ -20,8 +20,6 @@ _logger = get_logger()
 
 
 def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
-    wandb.init()
-
     cfg = glob(os.path.join(_HERE, 'config', '**', model_cfg_name+'.yaml'), recursive=True)
     cfg = OmegaConf.load(cfg[0])
     
@@ -61,5 +59,3 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     artifact = wandb.Artifact('my-code', type='dataset')
     artifact.add_dir(os.path.join(_HERE, '..'))
     run.log_artifact(artifact)
-
-    wandb.finish(0)
