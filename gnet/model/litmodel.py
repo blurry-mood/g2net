@@ -103,6 +103,8 @@ class LitModel(pl.LightningModule):
         self.log('val_loss', loss, prog_bar=True)
         self.log('val_acc', self.val_acc(probs, y), prog_bar=True)
         self.log('val_f1', self.val_f1(probs, y), prog_bar=True)
+        self.val_acc.reset()
+        self.val_f1.reset()
         return loss
 
     def test_step(self, batch, batch_idx):
@@ -121,6 +123,8 @@ class LitModel(pl.LightningModule):
         self.log('test_loss', loss, prog_bar=True, on_step=True)
         self.log('test_acc', self.val_acc(probs, y), prog_bar=True)
         self.log('test_f1', self.val_f1(probs, y), prog_bar=True)
+        self.val_acc.reset()
+        self.val_f1.reset()
         return loss
 
     def training_epoch_end(self, outputs) -> None:
