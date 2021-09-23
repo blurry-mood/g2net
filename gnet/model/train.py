@@ -28,7 +28,7 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
-    logger = WandbLogger(entity='blurry-mood', project='g2net')
+    logger = WandbLogger(entity='blurry-mood', project='g2net', reinit=True)
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
 
     # trainer
@@ -50,9 +50,9 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
         os.system('rm * -rf')
     trainer.save_checkpoint("litmodel.ckpt")
 
-    wandb.finish(0)
+    # wandb.finish(0)
 
-    run = wandb.init(job_type="dataset-creation",  reinit=True)
+    # run = wandb.init(job_type="dataset-creation",  reinit=True)
 
     # log artifacts
     run = trainer.logger.experiment
@@ -64,4 +64,4 @@ def train(model_cfg_name, pre_cfg_name, dm_cfg_name, data_path):
     artifact.add_dir(os.path.join(_HERE, '..'))
     run.log_artifact(artifact)
 
-    wandb.finish(0)
+    # wandb.finish(0)
