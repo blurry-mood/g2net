@@ -23,10 +23,15 @@ _SCHEDULER = {'linear': get_linear_schedule_with_warmup, 'constant':get_constant
 
 class LitModel(pl.LightningModule):
 
-    def __init__(self, config, preprocess_config_name):
+    def __init__(self, config, preprocess_config_name:str):
         super().__init__()
 
         self.save_hyperparameters()
+
+        try:
+            self.segment = config.segment
+        except:
+            self.segment = False
 
         self.preprocess = Preprocessor(preprocess_config_name)
         self.model = model(config.model_name,
@@ -45,8 +50,8 @@ class LitModel(pl.LightningModule):
         # metric
         self.train_auroc = AUROC(compute_on_step=False)
         self.val_auroc = AUROC(compute_on_step=False)
-        self.val_acc = Accuracy(compute_on_step=True, )
-        self.val_f1 = F1(compute_on_step=True, )
+        self.val_acc = Accuracy(compute_on_step=True, threshold=0.3 )
+        self.val_f1 = F1(compute_on_step=True, threshold=0.3 )
 
         # log
         _logger.info('The model is created')
@@ -60,7 +65,11 @@ class LitModel(pl.LightningModule):
 
     def forward(self, x):
         x = self.preprocess(x)
-        return self.model(x)
+        x = x[..., :-1]
+        x = self.model(x)
+        if self.segment:
+            x = x.mean(dim=[2, 3])
+        return x
 
     def training_step(self, batch, batch_idx):
         x, y = batch
