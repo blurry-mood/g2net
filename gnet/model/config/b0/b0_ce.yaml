@@ -5,17 +5,17 @@ loss:
   name: celoss
   args:
 optimizer: 
-  name: adamw
+  name: adam
   args:
     lr: 1e-2
-    weight_decay: 0
+    weight_decay: 1e-4
 scheduler:
   name: linear
   args:
     num_warmup_steps: 3
     num_training_steps: 15
 trainer:
-  max_epochs: 8
+  max_epochs: 10
   num_sanity_val_steps: 128  
   limit_val_batches: 512
   limit_test_batches: 2048
