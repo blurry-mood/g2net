@@ -70,7 +70,7 @@ def progressive_train(version:str, model_cfg_name, pre_cfg_name, dm_cfg_name, da
     dm = DataModule(data_path, dm_cfg_name)
 
     # wandb logger & lr monitor
-    logger = WandbLogger(entity='blurry-mood', project='g2net', reinit=True)
+    logger = WandbLogger(entity='blurry-mood', project='g2net')
     lr_monitor = LearningRateMonitor(logging_interval='epoch')
 
     # trainer
