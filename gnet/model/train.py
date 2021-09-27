@@ -103,7 +103,7 @@ def progressive_train(version:str, model_cfg_name, pre_cfg_name, dm_cfg_name, da
     run.log_artifact(artifact)
 
 def _read_artifact(version:str):
-    run = wandb.init()
+    run = wandb.init(entity='blurry-mood', project='g2net')
     artifact = run.use_artifact(f'blurry-mood/g2net/my-model:{version}', type='model')
     artifact_dir = artifact.download()    
     ckpts = glob(os.path.join(artifact_dir, '*.ckpt'))
