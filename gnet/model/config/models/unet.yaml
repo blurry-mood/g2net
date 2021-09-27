@@ -20,4 +20,4 @@ trainer:
   num_sanity_val_steps: 128  
   limit_val_batches: 512
   limit_test_batches: 2048
-  gradient_clip_val: 1
+  gradient_clip_val: 2
