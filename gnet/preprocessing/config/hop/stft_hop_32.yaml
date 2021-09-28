@@ -4,7 +4,7 @@ transform:
   window: hann
   freq_bins: 256                # by default: n_fft//2+1
   hop_length: 32                # stride
-  freq_scale: log               # linear, log, no; relies on the fmin, fmax values
+  freq_scale: linear               # linear, log, no; relies on the fmin, fmax values
   center: true                  # kernel centered around the current sample
   pad_mode: constant            # reflect
   fmin: 20
